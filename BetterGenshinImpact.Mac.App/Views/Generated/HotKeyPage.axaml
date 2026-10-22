@@ -1,0 +1,72 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.HotKeyPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid Margin="{StaticResource PagePadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+                FontWeight="SemiBold"
+                Grid.Row="0"
+                Margin="0,0,0,8"
+                Text="{i18n:T 快捷键设置}" />
+        <TextBlock
+                Grid.Row="1"
+                Margin="0,0,0,8"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{i18n:T 全局热键：只支持组合键和功能键，软件启动直接生效。键鼠监听：支持任意键盘单键、鼠标侧键，功能启动后才生效（推荐）。点击类型按钮可以切换快捷键类型。其中存在长按需求的功能不能使用全局热键。}"
+                TextWrapping="Wrap" />
+        <Border
+                Grid.Row="2"
+                Background="{DynamicResource CardBackground}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="{DynamicResource ControlCornerRadius}">
+            <Grid Margin="4">
+                <Grid ColumnDefinitions="*,235" IsVisible="False">
+                    <Grid x:Name="TreeColumnStar" Grid.Column="0" />
+                </Grid>
+                <DockPanel>
+                    <Grid ColumnDefinitions="*,100,120" Margin="12,4" DockPanel.Dock="Top">
+                        <TextBlock Text="{i18n:T 功能}" Grid.Column="0" Classes="caption" />
+                        <TextBlock Text="{i18n:T 快捷键类型}" Grid.Column="1" Classes="caption" />
+                        <TextBlock Text="{i18n:T 配置快捷键}" Grid.Column="2" Classes="caption" />
+                    </Grid>
+                    <TreeView BorderThickness="0" ItemsSource="{Binding HotKeySettingModels}">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate ItemsSource="{Binding Children}">
+                                <Grid ColumnDefinitions="*,100,120">
+                                    <ContentControl Content="{Binding LocalizedFunctionName}" Grid.Column="0" />
+                                    <Button
+                                            Height="33"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding SwitchHotKeyTypeCommand}"
+                                            Content="{Binding LocalizedHotKeyTypeName, Mode=OneWay}"
+                                            IsEnabled="{Binding SwitchHotkeyTypeEnabled, Mode=OneWay}"
+                                            IsVisible="{Binding !IsDirectory, Mode=OneWay}"
+                                            Grid.Column="1" />
+                                    <c:HotKeyTextBox
+                                            Padding="16,6,16,6"
+                                            VerticalAlignment="Center"
+                                            HotKeyTypeName="{Binding HotKeyTypeName, Mode=OneWay}"
+                                            Hotkey="{Binding HotKey}"
+                                            TextAlignment="Center"
+                                            IsVisible="{Binding !IsDirectory, Mode=OneWay}"
+                                            Grid.Column="2" />
+                                </Grid>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

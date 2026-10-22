@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!--
+        在 macOS / Linux 上运行原版单元测试：直接链接 Test/BetterGenshinImpact.UnitTest 的测试源码，
+        被测代码换成跨平台工程 BetterGenshinImpact.Mac。依赖 TorchSharp 的钓鱼模型训练测试不参与。
+    -->
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <RootNamespace>BetterGenshinImpact.UnitTest</RootNamespace>
+        <NoWarn>$(NoWarn);CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8625;CS0618;CA1416;CS1998;xUnit1031;xUnit2013</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.2.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="xunit" Version="2.5.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\BetterGenshinImpact.UnitTest\**\*.cs"
+                 Exclude="..\BetterGenshinImpact.UnitTest\obj\**;..\BetterGenshinImpact.UnitTest\bin\**;..\BetterGenshinImpact.UnitTest\Assets\**;..\BetterGenshinImpact.UnitTest\GameTaskTests\AutoFishingTests\RodNet*.cs;..\BetterGenshinImpact.UnitTest\GameTaskTests\AutoFishingTests\TorchFixture.cs;..\BetterGenshinImpact.UnitTest\InitCollection.cs;..\BetterGenshinImpact.UnitTest\CoreTests\MonitorTests\RelativeMouseInputMonitorTests.cs"
+                 LinkBase="Shared" />
+        <None Include="..\BetterGenshinImpact.UnitTest\Assets\**" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\BetterGenshinImpact.Mac\BetterGenshinImpact.Mac.csproj" />
+    </ItemGroup>
+
+</Project>

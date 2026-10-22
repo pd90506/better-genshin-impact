@@ -1,0 +1,2246 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:config="using:BetterGenshinImpact.Core.Config"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    xmlns:media="using:System.Windows.Media"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.CommonSettingsPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <StackPanel Margin="{StaticResource PagePadding}">
+        <TextBlock
+                Margin="0,0,0,12"
+                FontSize="18"
+                FontWeight="SemiBold"
+                Text="{i18n:T 软件设置}" />
+        <c:CardControl Margin="0,0,0,12">
+            <c:CardControl.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 软件UI语言}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="UI Language"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,0,36,0"
+                            DisplayMemberBinding="{Binding Value}"
+                            ItemsSource="{Binding LanguageDict}"
+                            SelectedItem="{Binding Config.OtherConfig.UiCultureInfoName, Converter={StaticResource CultureInfoNameToKVPConverter}, Mode=TwoWay}"
+                            SelectedValueBinding="{Binding Key}" />
+                </Grid>
+            </c:CardControl.Header>
+        </c:CardControl>
+        <c:CardControl Margin="0,0,0,12">
+            <c:CardControl.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 原神游戏语言}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Game Language"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,0,36,0"
+                            DisplayMemberBinding="{Binding Value}"
+                            ItemsSource="{Binding LanguageDict}"
+                            SelectedItem="{Binding Config.OtherConfig.GameCultureInfoName, Converter={StaticResource CultureInfoNameToKVPConverter}, Mode=TwoWay}"
+                            SelectedValueBinding="{Binding Key}" />
+                </Grid>
+            </c:CardControl.Header>
+        </c:CardControl>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 主窗口自定义背景}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 使用本地图片装饰软件主窗口，可调整透明度和填充方式}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,24,0"
+                            IsChecked="{Binding Config.CommonConfig.MainBackgroundEnabled, Mode=TwoWay}" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 背景图片}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 支持常见图像格式，选择后可裁剪或旋转}"
+                            TextWrapping="Wrap" />
+                    <StackPanel
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="16,0,36,0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                        <Button
+                                Classes="accent"
+                                Margin="0,0,8,0"
+                                Command="{Binding SelectMainBackgroundImageCommand}"
+                                Content="{i18n:T 选择图片}" />
+                        <Button Command="{Binding ClearMainBackgroundImageCommand}" Content="{i18n:T 清除}" />
+                    </StackPanel>
+                    <TextBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Margin="0,12,36,0"
+                            IsReadOnly="True"
+                            Watermark="{i18n:T 尚未选择背景图片}"
+                            Text="{Binding Config.CommonConfig.MainBackgroundImagePath, Mode=OneWay}"
+                            ToolTip.Tip="{Binding Config.CommonConfig.MainBackgroundImagePath, Mode=OneWay}" />
+                </Grid>
+                <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 背景不透明度}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 数值越低，背景越淡，界面文字越清晰}"
+                            TextWrapping="Wrap" />
+                    <StackPanel
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="16,0,36,0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                        <Slider
+                                Width="180"
+                                VerticalAlignment="Center"
+                                Maximum="1"
+                                Minimum="0.05"
+                                TickFrequency="0.05"
+                                Value="{Binding Config.CommonConfig.MainBackgroundOpacity, Mode=TwoWay}" />
+                        <TextBlock
+                                MinWidth="44"
+                                Margin="12,0,0,0"
+                                VerticalAlignment="Center"
+                                FontFamily="Cascadia Mono, Consolas, Courier New, monospace"
+                                FontSize="14"
+                                Text="{Binding Config.CommonConfig.MainBackgroundOpacity, StringFormat={}{0:P0}}" />
+                    </StackPanel>
+                </Grid>
+                <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 图片填充方式}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 控制图片在主窗口中的缩放和裁切方式}"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="120"
+                            Margin="16,0,36,0"
+                            VerticalAlignment="Center"
+                            SelectedValue="{Binding Config.CommonConfig.MainBackgroundStretch, Mode=TwoWay}"
+                            SelectedValueBinding="{Binding Tag}">
+                        <ComboBoxItem Content="{i18n:T 填充}" Tag="{x:Static media:Stretch.Fill}" />
+                        <ComboBoxItem Content="{i18n:T 等比填充}" Tag="{x:Static media:Stretch.UniformToFill}" />
+                        <ComboBoxItem Content="{i18n:T 等比适应}" Tag="{x:Static media:Stretch.Uniform}" />
+                        <ComboBoxItem Content="{i18n:T 原始尺寸}" Tag="{x:Static media:Stretch.None}" />
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 启用遮罩窗口}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 在游戏窗口上方显示日志、状态、识别结果等信息。需要重启生效。}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,24,0"
+                            IsChecked="{Binding Config.MaskWindowConfig.MaskEnabled, Mode=TwoWay}" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 启用拖拽调整位置大小}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 开启后可以拖拽调整日志、状态栏与指标栏位置，并调整大小}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,12,0"
+                            IsChecked="{Binding Config.MaskWindowConfig.OverlayLayoutEditEnabled, Mode=TwoWay}" />
+                    <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="2"
+                            Margin="0,0,36,0"
+                            Command="{Binding ResetMaskOverlayLayoutCommand}"
+                            Content="{i18n:T 重置位置}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock FontWeight="SemiBold" Text="{i18n:T 遮罩显示与样式}" TextWrapping="Wrap" />
+                        <TextBlock
+                                Margin="0,4,0,0"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{i18n:T 调整遮罩文字、颜色和背景。}"
+                                TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Button
+                            Grid.Column="1"
+                            Margin="12,0,36,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding ResetOverlayStyleCommand}"
+                            Content="{i18n:T 重置}" />
+                </Grid>
+                <ItemsControl Margin="16,0,52,8" ItemsSource="{Binding OverlayStyleSettingGroups}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,0,12"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                FontWeight="SemiBold"
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{Binding Name}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Margin="0,4,0,0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{Binding Description}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="12,0,24,0"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                IsChecked="{Binding SwitchValue, Mode=TwoWay}"
+                                                IsVisible="{Binding HasSwitch}" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16" IsVisible="{Binding IsMetricsGroup}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="{i18n:T 显示的指标}" TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Margin="0,4,0,8"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 勾选需要显示在指标栏里的项目。顺序和遮罩中的显示顺序一致。}"
+                                                TextWrapping="Wrap" />
+                                        <ItemsControl Grid.Row="2" Margin="32,0,0,0" ItemsSource="{Binding #PageRoot.DataContext.OverlayMetricItems}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Columns="3" Rows="4" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox
+                                                            Width="132"
+                                                            Height="28"
+                                                            HorizontalAlignment="Left"
+                                                            HorizontalContentAlignment="Left"
+                                                            VerticalContentAlignment="Center"
+                                                            IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                                            ToolTip.Tip="{Binding ToolTipText}">
+                                                        <TextBlock Margin="4,0,0,0" Text="{Binding DisplayName}" TextWrapping="NoWrap" />
+                                                    </CheckBox>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                    <ItemsControl ItemsSource="{Binding Items}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="16">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="218" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                            Grid.Row="0"
+                                                            Grid.Column="0"
+                                                            Text="{Binding DisplayName}"
+                                                            TextWrapping="Wrap" />
+                                                    <TextBlock
+                                                            Grid.Row="1"
+                                                            Grid.Column="0"
+                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                            Text="{Binding Description}"
+                                                            TextWrapping="Wrap" />
+                                                    <TextBox
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="2"
+                                                            Grid.Column="1"
+                                                            Width="130"
+                                                            Margin="0,0,36,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding TextValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                            IsVisible="{Binding IsText}" />
+                                                    <ComboBox
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="2"
+                                                            Grid.Column="1"
+                                                            Width="130"
+                                                            Margin="0,0,36,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            ItemsSource="{Binding ColorOptions}"
+                                                            SelectedValue="{Binding ColorValue, Mode=TwoWay}"
+                                                            SelectedValueBinding="{Binding Value}"
+                                                            IsVisible="{Binding IsColor}">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Border
+                                                                            Width="14"
+                                                                            Height="14"
+                                                                            Margin="0,0,8,0"
+                                                                            VerticalAlignment="Center"
+                                                                            Background="{Binding SwatchBrush}"
+                                                                            BorderBrush="Gray"
+                                                                            BorderThickness="1" />
+                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                    <TextBox
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="2"
+                                                            Grid.Column="1"
+                                                            Width="130"
+                                                            Margin="0,0,36,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding TextValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                            IsVisible="{Binding IsNumber}" />
+                                                    <StackPanel
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="2"
+                                                            Grid.Column="1"
+                                                            Margin="0,0,36,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Orientation="Horizontal"
+                                                            IsVisible="{Binding IsSlider}">
+                                                        <Slider
+                                                                Width="130"
+                                                                VerticalAlignment="Center"
+                                                                Maximum="{Binding SliderMaximum}"
+                                                                Minimum="{Binding SliderMinimum}"
+                                                                TickFrequency="{Binding SliderTickFrequency}"
+                                                                Value="{Binding SliderValue, Mode=TwoWay}" />
+                                                        <TextBlock
+                                                                Margin="12,0,0,0"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Center"
+                                                                FontFamily="Cascadia Mono, Consolas, Courier New, monospace"
+                                                                FontSize="14"
+                                                                MinWidth="40"
+                                                                Text="{Binding SliderValue, StringFormat=F2}" />
+                                                    </StackPanel>
+                                                    <ToggleSwitch
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="2"
+                                                            Grid.Column="1"
+                                                            Margin="0,0,36,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            IsChecked="{Binding BoolValue, Mode=TwoWay}"
+                                                            IsVisible="{Binding IsBool}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <Grid Margin="16" IsVisible="{Binding IsLogGroup}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="218" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 日志文件}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 需要排查问题时，可以打开日志目录查看完整记录。}"
+                                                TextWrapping="Wrap" />
+                                        <Button
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding #PageRoot.DataContext.GoToLogFolderCommand}"
+                                                Content="{i18n:T 打开日志目录}" />
+                                    </Grid>
+                                    <Grid Margin="16" IsVisible="{Binding IsCustomHtmlGroup}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 编辑 HTML 遮罩}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 打开 HTML 编辑器。需要查看文件时使用打开目录。}"
+                                                TextWrapping="Wrap" />
+                                        <Button
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,8,0"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding #PageRoot.DataContext.OpenCustomHtmlMaskEditorCommand}"
+                                                Content="{i18n:T 打开编辑器}" />
+                                        <Button
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="2"
+                                                Margin="0,0,36,0"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding #PageRoot.DataContext.OpenCustomHtmlMaskFolderCommand}"
+                                                Content="{i18n:T 打开目录}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 启用准星}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 在遮罩窗口中心显示准星}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding Config.MaskWindowConfig.CrosshairEnabled, Mode=TwoWay}" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Text="{i18n:T 准星类型}"
+                                    TextWrapping="Wrap" />
+                            <ComboBox
+                                    Grid.Column="1"
+                                    Width="140"
+                                    SelectedValue="{Binding Config.MaskWindowConfig.CrosshairType, Mode=TwoWay}"
+                                    SelectedValueBinding="{Binding Tag}">
+                                <ComboBoxItem Tag="{x:Static config:CrosshairType.Crosshair}" Content="{i18n:T 十字准星}" />
+                                <ComboBoxItem Tag="{x:Static config:CrosshairType.Diagonal}" Content="{i18n:T 倒V字准星}" />
+                                <ComboBoxItem Tag="{x:Static config:CrosshairType.Dot}" Content="{i18n:T 圆点准星}" />
+                                <ComboBoxItem Tag="{x:Static config:CrosshairType.DotCrosshair}" Content="{i18n:T 中心点十字}" />
+                                <ComboBoxItem Tag="{x:Static config:CrosshairType.Custom}" Content="{i18n:T 自定义准星}" />
+                            </ComboBox>
+                            <Rectangle Grid.Column="2" Width="36" />
+                        </Grid>
+                        <Grid Margin="16,0,16,16">
+                            <Border Padding="12,8" CornerRadius="4" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
+                                <StackPanel>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 准星颜色}"
+                                                TextWrapping="Wrap" />
+                                        <Rectangle Grid.Column="1" />
+                                        <TextBox
+                                                Grid.Column="2"
+                                                Width="100"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding Config.MaskWindowConfig.CrosshairColor, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 线宽}"
+                                                TextWrapping="Wrap" />
+                                        <Rectangle Grid.Column="1" />
+                                        <NumericUpDown
+                                                Grid.Column="2"
+                                                Width="100"
+                                                VerticalAlignment="Center"
+                                                Maximum="100"
+                                                FormatString="0"
+                                                Minimum="1"
+                                                Increment="1"
+                                                Value="{Binding Config.MaskWindowConfig.CrosshairLineWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 大小}"
+                                                TextWrapping="Wrap" />
+                                        <Rectangle Grid.Column="1" />
+                                        <NumericUpDown
+                                                Grid.Column="2"
+                                                Width="100"
+                                                VerticalAlignment="Center"
+                                                Maximum="1000"
+                                                FormatString="0"
+                                                Minimum="1"
+                                                Increment="1"
+                                                Value="{Binding Config.MaskWindowConfig.CrosshairSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 中心点间隔}"
+                                                TextWrapping="Wrap" />
+                                        <Rectangle Grid.Column="1" />
+                                        <NumericUpDown
+                                                Grid.Column="2"
+                                                Width="100"
+                                                VerticalAlignment="Center"
+                                                Maximum="1000"
+                                                FormatString="0"
+                                                Minimum="0"
+                                                Increment="1"
+                                                Value="{Binding Config.MaskWindowConfig.CrosshairGap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <Grid Margin="16,0,16,16">
+                            <Border Padding="12,8" CornerRadius="4" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
+                                <StackPanel>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 选择图片}"
+                                                TextWrapping="Wrap" />
+                                        <Rectangle Grid.Column="1" />
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBox
+                                                    Width="180"
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding Config.MaskWindowConfig.CrosshairImagePath, Mode=TwoWay}"
+                                                    IsReadOnly="True" />
+                                            <Button Margin="8,0,0,0" Command="{Binding SelectCrosshairImageCommand}" Content="{i18n:T 浏览}" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 缩放方式}"
+                                                TextWrapping="Wrap" />
+                                        <Rectangle Grid.Column="1" />
+                                        <ComboBox
+                                                Grid.Column="2"
+                                                Width="140"
+                                                VerticalAlignment="Center"
+                                                SelectedValue="{Binding Config.MaskWindowConfig.CrosshairScaleMode, Mode=TwoWay}"
+                                                SelectedValueBinding="{Binding Tag}">
+                                            <ComboBoxItem Tag="{x:Static config:CrosshairScaleMode.Original}" Content="{i18n:T 原图}" />
+                                            <ComboBoxItem Tag="{x:Static config:CrosshairScaleMode.Fit}" Content="{i18n:T 自适应}" />
+                                        </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 启用UID遮盖}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 遮盖右下角的UID区域}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.MaskWindowConfig.UidCoverEnabled, Mode=TwoWay}" />
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 开发者功能}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 模板素材制作、调试截图等面向开发和素材维护的工具}"
+                            TextWrapping="Wrap" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T Recognition 模板素材制作}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 选择本地图片后独立打开模板框选与配置工具}"
+                            TextWrapping="Wrap" />
+                    <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            Command="{Binding OpenRecognitionTemplateEditorFromImageCommand}"
+                            Content="{i18n:T 选择图片}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 启用保存截图功能}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            TextWrapping="Wrap">
+                        <Run Text="{i18n:T 可以通过快捷键保存截图，文件保存在}" />
+                        <Span Command="{Binding GoToFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                            <Run Text="log/screenshot" />
+                        </Span>
+                    </TextBlock>
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,24,0"
+                            IsChecked="{Binding Config.CommonConfig.ScreenshotEnabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 截图快捷键}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 截图功能主要用于错误排查，训练素材快速获取等开发相关功能}"
+                            TextWrapping="Wrap" />
+                    <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            Command="{Binding GoToHotKeyPageCommand}"
+                            Content="{i18n:T 绑定快捷键}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 截图遮盖UID}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 生成的截图会遮盖右下角的UID区域}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.CommonConfig.ScreenshotUidCoverEnabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 保存奖励识别截图}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            TextWrapping="Wrap">
+                        <Run Text="{i18n:T 保存奖励识别的调试图片到 }" />
+                        <Span Command="{Binding GoToRewardRecognitionFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                            <Run Text="log/RewardRecognition" />
+                        </Span>
+                    </TextBlock>
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsEnabled="{Binding Config.CommonConfig.ScreenshotEnabled}"
+                            IsChecked="{Binding Config.CommonConfig.RewardRecognitionScreenshotEnabled, Mode=TwoWay}" />
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 启动时自动更新已订阅的脚本}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 启动时自动同步脚本仓库并更新所有已订阅的脚本}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,24,0"
+                            IsChecked="{Binding Config.ScriptConfig.AutoUpdateSubscribedScripts, Mode=TwoWay}" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 命令行启动时也自动更新}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 通过命令行参数启动配置组/一条龙时，先等待脚本更新完成再执行}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.ScriptConfig.AutoUpdateBeforeCommandLineRun, Mode=TwoWay}" />
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <c:CardControl Margin="0,0,0,12">
+            <c:CardControl.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 退出时最小化到系统托盘}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 启用后点击右上角退出按钮会最小化到系统托盘继续运行，右键托盘图标退出}"
+                            TextWrapping="Wrap" />
+                </Grid>
+            </c:CardControl.Header>
+            <ToggleSwitch Margin="0,0,36,0" IsChecked="{Binding Config.CommonConfig.ExitToTray, Mode=TwoWay}" />
+        </c:CardControl>
+        <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T 通用功能设置}" />
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 按键绑定设置}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 如果你有游戏内改键需求，请在此配置对应的改键}"
+                            TextWrapping="Wrap" />
+                    <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,20,0"
+                            Command="{Binding OpenKeyBindingsWindowCommand}"
+                            Content="{i18n:T 配置}" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 启用全局按键映射}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 使按键绑定设置对外部脚本生效}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.KeyBindingsConfig.GlobalKeyMappingEnabled}" />
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <c:CardControl Margin="0,0,0,12">
+            <c:CardControl.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 地图追踪优先使用的特征匹配方式}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 影响所有地图追踪功能，重启后生效}"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="120"
+                            Margin="0,0,36,0"
+                            ItemsSource="{Binding MapPathingTypes}"
+                            SelectedItem="{Binding Config.PathingConditionConfig.MapMatchingMethod}" />
+                </Grid>
+            </c:CardControl.Header>
+        </c:CardControl>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 大地图地图传送设置}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 用于地图追踪、自动秘境、一条龙等功能中传送功能的配置}"
+                            TextWrapping="Wrap" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 地图移动过程中是否缩放地图}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 建议开启，关闭该设置可能在运行部分脚本时发生错误}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.TpConfig.MapZoomEnabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 地图拖动使用相对鼠标移动}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 用于兼容性测试，关闭时使用绝对坐标移动，通常更稳定}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.TpConfig.MapDragUseRelativeMove, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 传送操作间隔倍率}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 如果传送卡顿请调整倍率，倍率越大传送间隔越长，传送越稳定}"
+                            TextWrapping="Wrap" />
+                    <StackPanel
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                        <Slider
+                                Width="180"
+                                VerticalAlignment="Center"
+                                Maximum="100"
+                                Minimum="2"
+                                TickFrequency="1"
+                                Value="{Binding Config.TpConfig.TeleportOperationDelayMilliseconds, Mode=TwoWay}" />
+                        <TextBlock
+                                MinWidth="48"
+                                Margin="12,0,0,0"
+                                VerticalAlignment="Center"
+                                FontFamily="Cascadia Mono, Consolas, Courier New, monospace"
+                                FontSize="14"
+                                Text="{Binding Config.TpConfig.TeleportOperationDelayPercentage, StringFormat={}{0}%}" />
+                        <TextBlock
+                                MinWidth="58"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                FontFamily="Cascadia Mono, Consolas, Courier New, monospace"
+                                FontSize="14"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding Config.TpConfig.TeleportOperationDelayMilliseconds, StringFormat={}({0} ms)}" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{i18n:T 七天神像设置}" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 用于指定回血的七天神像}" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{i18n:T 七天神像国家}" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 选择七天神像所在国家}" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="120"
+                            Margin="0,0,36,0"
+                            ItemsSource="{Binding CountryList}"
+                            SelectedItem="{Binding SelectedCountry}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{i18n:T 七天神像区域}" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 选择七天神像所在区域}" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="120"
+                            Margin="0,0,36,0"
+                            ItemsSource="{Binding Areas}"
+                            SelectedItem="{Binding SelectedArea}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 回血等待间隔（秒）}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 【1.0-30.0】传送到七天神像之后需要等待多久恢复血量}"
+                            TextWrapping="Wrap" />
+                    <TextBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="90"
+                            Margin="0,0,36,0"
+                            Text="{Binding Config.TpConfig.HpRestoreDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 其他设置}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 设定一些其他功能的配置，失去焦点自动恢复等}"
+                            TextWrapping="Wrap" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 窗口类名优先检测}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 找不到时可开启本项改以窗口类名优先检测，未命中再回退原版方式。即时生效，默认关闭。}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.OtherConfig.WindowClassDetectPreferred, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 游戏失去焦点时候，强制恢复激活游戏窗口}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 适用于调度器任务和部分独立任务，失去焦点后，将自动激活游戏窗口，开启此项后，如果想切出游戏窗口，可以先暂停任务，之后再切出}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.OtherConfig.RestoreFocusOnLostEnabled, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 禁用键鼠监听}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 禁用后将暂停一键宏等键鼠触发的任务，需重启生效}"
+                            TextWrapping="Wrap" />
+                    <ToggleSwitch
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,36,0"
+                            IsChecked="{Binding Config.DisableInputMonitor, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 调度器路径追踪任务大地图传送过程中自动领取委托}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 调度器路径追踪任务中，打开大地图准备传送时，会首先检测是否存在需要领取的派遣任务，如果存在，则自动领取委托（调用一条龙领取奖励逻辑），选择领取城市后生效。}"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="100"
+                            Margin="0,0,36,0"
+                            ItemsSource="{Binding AdventurersGuildCountry}"
+                            SelectedItem="{Binding Config.OtherConfig.AutoFetchDispatchAdventurersGuildCountry, Mode=TwoWay}" />
+                </Grid>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 服务器时区设置}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 设置游戏服务器的时区，用于计算基于服务器时间的每日重置时间等任务调度。JS脚本可手动使用此设置来处理不同区域服务器的时区。}"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="100"
+                            Margin="0,0,36,0"
+                            ItemsSource="{Binding ServerTimeZones}"
+                            SelectedValue="{Binding Config.OtherConfig.ServerTimeZoneOffset}"
+                            SelectedValueBinding="{Binding Item1}"
+                            DisplayMemberBinding="{Binding Item2}" />
+                </Grid>
+                <Grid Margin="16,0,16,12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 图标识别模型}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 默认ItemV2且推荐，如果出现问题可尝试切换，GridIcon 在合成台与背包计数任务中识别不全}"
+                            TextWrapping="Wrap" />
+                    <ComboBox
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            MinWidth="120"
+                            Margin="0,0,36,0"
+                            ItemsSource="{Binding ItemIconRecognitionModes}"
+                            SelectedValueBinding="{Binding Key}"
+                            DisplayMemberBinding="{Binding Value}"
+                            SelectedValue="{Binding Config.OtherConfig.ItemIconRecognitionMode, Mode=TwoWay}" />
+                </Grid>
+                <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 调度器异常重启配置}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 当调度器任务异常抛出未预期错误时，累计一定次数后，自动重启bgi，以恢复功能。}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding Config.OtherConfig.AutoRestartConfig.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 异常次数}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 当运行调度器任务时，异常导致任务失败的计数，当达到计数时会重启bgi。}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="90"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding Config.OtherConfig.AutoRestartConfig.FailureCount, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 是否同时重启游戏}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 重启bgi时，同时重启游戏，需开启首页启动配置：同时启动原神、自动进入游戏，此配置才会生效。}" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,36,0"
+                                    IsChecked="{Binding Config.OtherConfig.AutoRestartConfig.RestartGameTogether, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 战斗失败算异常}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 在锄地脚本中，实际战斗成功次数大于等于预期战斗次数，才能成功，否则抛出异常。可以解决锄地时，应打开地图失败、切换队伍、或卡在按Z的切换界面、卡月卡等，可能导致的无限卡死。但需要确定自己的队伍练度，有无可能连续超过配置失败次数个脚本都复活超次，导致判断失败，从而触发无限重启。}" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,36,0"
+                                    IsChecked="{Binding Config.OtherConfig.AutoRestartConfig.IsFightFailureExceptional, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 路径未完全走完算异常}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 比战斗失败更严格的条件，勾选此项下，追踪文件，如果未执行完，算失败。此项勾选需要自身的追踪任务稳定性高。可以先关观察日志，打开异常情况统计下，有无连续标红超过失败次数的情况，有则不建议勾选。}" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,36,0"
+                                    IsChecked="{Binding Config.OtherConfig.AutoRestartConfig.IsPathingFailureExceptional, Mode=TwoWay}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 锄地规划配置}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 开启后，当每日（4点开始）统计锄地超过上限（需脚本支持，勾选允许锄地统计标志，或通过追踪文件目录的控制文件，来记录各追踪文件数据），会跳过接下来的锄地任务。}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding Config.OtherConfig.FarmingPlanConfig.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 日精英上限}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 当锄地精英数量到达上限时，跳过主目标为精英的锄地脚本。}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="90"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding Config.OtherConfig.FarmingPlanConfig.DailyEliteCap, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 日小怪上限}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 当锄地小怪数量到达上限时，会跳过主目标为小怪的锄地脚本。}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="90"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding Config.OtherConfig.FarmingPlanConfig.DailyMobCap, Mode=TwoWay}" />
+                        </Grid>
+                        <StackPanel>
+                            <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 结合米游社数据计算}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 使用米游社数据（大概两三小时延时），对锄地数量进行修正，由于米游社 Cookie 在一段时间后会失效，需要重新获取，所以如果当天存在米游社的数据，则上限需按照下面配置的来，否则按照上方配置的限制来（考虑到锄地之外的杀怪，如狗粮卡时间，所以估算值可能不一样）。}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,24,0"
+                                                IsChecked="{Binding Config.OtherConfig.FarmingPlanConfig.MiyousheDataConfig.Enabled, Mode=TwoWay}" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 日精英上限}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 当锄地精英数量到达上限时，跳过主目标为精英的锄地脚本。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="90"
+                                                Margin="0,0,36,0"
+                                                Text="{Binding Config.OtherConfig.FarmingPlanConfig.MiyousheDataConfig.DailyEliteCap, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 日小怪上限}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 当锄地小怪数量到达上限时，会跳过主目标为小怪的锄地脚本。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="90"
+                                                Margin="0,0,36,0"
+                                                Text="{Binding Config.OtherConfig.FarmingPlanConfig.MiyousheDataConfig.DailyMobCap, Mode=TwoWay}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 米游社相关}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 用于配置米游社相关的信息如cookie}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="2*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Text="cookie"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Margin="0,24,0,0"
+                                    VerticalAlignment="Top"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 米游社cookie}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="400"
+                                    MinHeight="60"
+                                    MaxWidth="400"
+                                    Margin="0,0,8,0"
+                                    VerticalAlignment="Stretch"
+                                    Text="{Binding Config.OtherConfig.MiyousheConfig.Cookie, Mode=TwoWay}" />
+                            <Button
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Width="50"
+                                    Height="28"
+                                    Margin="4,0,0,0"
+                                    VerticalAlignment="Top"
+                                    Command="{Binding QuestionButtonOnClickCommand}"
+                                    Content="?"
+                                    FontWeight="Bold" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T cookie与调度器日志处同步}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 开启后，当调度器日志更改，或此处更改，都会同步其cookie。}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding Config.OtherConfig.MiyousheConfig.LogSyncCookie, Mode=TwoWay}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T OCR 配置}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T OCR 相关配置，面向进阶用户。}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T PaddleOCR模型}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 如果需要使用其他模型，请在此处选择。}"
+                                    TextWrapping="Wrap" />
+                            <ComboBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="90"
+                                    Margin="0,0,36,0"
+                                    ItemsSource="{Binding PaddleOcrModelConfigs}"
+                                    SelectedItem="{Binding SelectedPaddleOcrModelConfig, Mode=TwoWay}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="16,0,52,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T WGC V2 设置}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T WGC V2 截图方式的专属配置，面向进阶用户。}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 'WGC V2 帧率上限（毫秒）'}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T '0=不启用限流（默认）；限制 DWM 推帧频率以降低 GPU 占用；仅 Windows 11 24H2 及以上系统生效'}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="90"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding Config.WgcMinUpdateIntervalMs, Mode=TwoWay}" />
+                        </Grid>
+                        <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 'WGC V2 使用 CPU 颜色转换'}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T '默认由 GPU 完成 BGRA→BGR 打包；开启后回退为 CPU 转换，用于对比测试；重启捕获后生效'}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,36,0"
+                                    IsChecked="{Binding Config.WgcV2UseCpuConvert, Mode=TwoWay}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </Expander>
+        <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T 帮助}" />
+        <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+            <Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 版本更新}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 检查软件是否有新版本可用}"
+                            TextWrapping="Wrap" />
+                    <Button
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Margin="0,0,20,0"
+                            Command="{Binding CheckUpdateCommand}"
+                            Content="{i18n:T 检查更新}" />
+                </Grid>
+            </Expander.Header>
+            <StackPanel>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 检查是否存在最新测试版}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 【测试版】非常不稳定，请谨慎选择更新！}"
+                            TextWrapping="Wrap" />
+                    <StackPanel
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                        <Button Margin="0,0,36,0" Command="{Binding CheckUpdateAlphaCommand}" Content="{i18n:T 检查更新}" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Expander>
+        <c:CardControl Margin="0,0,0,12">
+            <c:CardControl.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{i18n:T 关于 BetterGI}"
+                            TextWrapping="Wrap" />
+                    <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{i18n:T 查看项目、文档等信息}"
+                            TextWrapping="Wrap" />
+                </Grid>
+            </c:CardControl.Header>
+            <Button Margin="0,0,36,0" Command="{Binding OpenAboutWindowCommand}" Content="{i18n:T 查看}" />
+        </c:CardControl>
+    </StackPanel>
+</UserControl>

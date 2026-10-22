@@ -198,6 +198,8 @@ namespace System.Drawing
 
         public static Graphics FromImage(Image image) => new(((Bitmap)image).Mat);
 
+        public void Clear(Color color) => _mat.SetTo(ToScalar(color));
+
         private static Scalar ToScalar(Color c) => new(c.B, c.G, c.R, c.A);
 
         public void FillRectangle(Brush brush, Rectangle rect) =>

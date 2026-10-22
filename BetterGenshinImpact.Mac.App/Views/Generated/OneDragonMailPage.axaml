@@ -1,0 +1,25 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.OneDragonMailPage" x:Name="PageRoot">
+    <StackPanel>
+        <TextBlock
+                Margin="0,0,0,10"
+                FontSize="15"
+                FontWeight="Bold"
+                Text="{Binding Title}" />
+        <ToggleSwitch Margin="0,0,0,10" Content="{i18n:T 领取所有邮件}" IsChecked="{Binding CollectAllMail}" />
+        <ToggleSwitch Margin="0,0,0,10" Content="{i18n:T 领取附件}" IsChecked="{Binding CollectAttachments}" />
+        <NumericUpDown
+                Margin="0,0,0,10"
+                Maximum="100"
+                Minimum="1"
+                Watermark="{i18n:T 最大领取邮件数量}"
+                Value="{Binding MaxMailsToCollect}" />
+    </StackPanel>
+</UserControl>

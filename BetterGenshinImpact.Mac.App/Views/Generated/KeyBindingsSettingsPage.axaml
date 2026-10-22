@@ -1,0 +1,74 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.KeyBindingsSettingsPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid Margin="{StaticResource PagePadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+                FontWeight="SemiBold"
+                Grid.Row="0"
+                Margin="0,0,0,8"
+                Text="{i18n:T 按键绑定设置}" />
+        <TextBlock
+                Grid.Row="1"
+                Margin="0,0,0,8"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{i18n:T 此处的按键设置默认对除自动拾取、钓鱼、音游、伐木外的内置功能有效，在设置中打开“启用全局按键映射”开关可对JS脚本、战斗脚本和地图追踪内包含的简易策略脚本生效。请手动设置拾取按键、星之归还按键、隐藏主界面按键。}"
+                TextWrapping="Wrap" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBlock Margin="0,0,8,0" VerticalAlignment="Center" Text="{i18n:T 配置来源}" />
+            <ComboBox
+                    Width="110"
+                    Margin="0,0,8,0"
+                    VerticalContentAlignment="Center"
+                    DisplayMemberBinding="{Binding DisplayName}"
+                    ItemsSource="{Binding RegistrySourceOptions}"
+                    SelectedItem="{Binding SelectedRegistrySource, Mode=TwoWay}" />
+            <Button Command="{Binding FetchFromRegistryCommand}" Content="{i18n:T 从注册表读取}" />
+        </StackPanel>
+        <Border
+                Grid.Row="3"
+                Background="{DynamicResource CardBackground}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="{DynamicResource ControlCornerRadius}">
+            <Grid Margin="4">
+                <Grid ColumnDefinitions="*,135" IsVisible="False">
+                    <Grid x:Name="TreeColumnStar" Grid.Column="0" />
+                </Grid>
+                <DockPanel>
+                    <Grid ColumnDefinitions="*,120" Margin="12,4" DockPanel.Dock="Top">
+                        <TextBlock Text="{i18n:T 动作}" Grid.Column="0" Classes="caption" />
+                        <TextBlock Text="{i18n:T 按键绑定}" Grid.Column="1" Classes="caption" />
+                    </Grid>
+                    <TreeView BorderThickness="0" ItemsSource="{Binding KeyBindingSettingModels}">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate ItemsSource="{Binding Children}">
+                                <Grid ColumnDefinitions="*,120">
+                                    <ContentControl Content="{Binding ActionName}" Grid.Column="0" />
+                                    <c:KeyBindingTextBox
+                                            Padding="16,6,16,6"
+                                            VerticalAlignment="Center"
+                                            KeyBinding="{Binding KeyValue}"
+                                            TextAlignment="Center"
+                                            IsVisible="{Binding !IsDirectory, Mode=OneWay}"
+                                            Grid.Column="1" />
+                                </Grid>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

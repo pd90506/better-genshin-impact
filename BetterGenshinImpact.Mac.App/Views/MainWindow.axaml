@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BetterGenshinImpact.MacApp.Views.MainWindow"
+        Title="BetterGI · 更好的原神（macOS）"
+        Width="1180"
+        Height="820"
+        MinWidth="900"
+        MinHeight="600"
+        Icon="avares://BetterGI/Assets/logo.ico"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="*,Auto,Auto">
+        <Grid ColumnDefinitions="210,*">
+            <!-- 左侧导航 -->
+            <DockPanel Grid.Column="0" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="16,18,16,12" Spacing="10">
+                    <Image Source="avares://BetterGI/Assets/logo.png" Width="28" Height="28" />
+                    <StackPanel>
+                        <TextBlock Text="BetterGI" FontSize="16" FontWeight="SemiBold" />
+                        <TextBlock x:Name="VersionText" Classes="caption" />
+                    </StackPanel>
+                </StackPanel>
+                <ListBox x:Name="NavList"
+                         Background="Transparent"
+                         Margin="6,0,6,6"
+                         SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="10" Margin="2,2">
+                                <TextBlock Text="{Binding Icon}" Width="22" FontSize="15" />
+                                <TextBlock Text="{Binding Title}" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+
+            <!-- 页面 -->
+            <ContentControl x:Name="PageHost" Grid.Column="1" />
+
+            <!-- 轻提示 -->
+            <StackPanel x:Name="ToastHost"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,12,16,0"
+                        Spacing="8"
+                        MaxWidth="420" />
+        </Grid>
+
+        <GridSplitter Grid.Row="1" Height="4" ResizeDirection="Rows" Background="{DynamicResource ControlStrokeColorDefaultBrush}" />
+
+        <!-- 日志 -->
+        <Expander Grid.Row="2" x:Name="LogExpander" IsExpanded="True" HorizontalAlignment="Stretch" Padding="0" CornerRadius="0">
+            <Expander.Header>
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Content="清空" x:Name="ClearLogButton" Padding="10,2" />
+                    <TextBlock Text="运行日志" VerticalAlignment="Center" />
+                </DockPanel>
+            </Expander.Header>
+            <ScrollViewer x:Name="LogScroll" Height="170">
+                <SelectableTextBlock x:Name="LogText"
+                                     FontFamily="Menlo, Consolas, monospace"
+                                     FontSize="12"
+                                     TextWrapping="Wrap"
+                                     Margin="8,0" />
+            </ScrollViewer>
+        </Expander>
+    </Grid>
+</Window>

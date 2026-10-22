@@ -7,7 +7,8 @@ namespace BetterGenshinImpact.Helpers;
 public static class OsVersionHelper
 {
     private static Version? versionCache;
-    private static readonly Version _osVersion = GetOSVersion();
+    // 非 Windows 平台（macOS 版）没有 RtlGetVersion，所有 IsWindows* 均为 false
+    private static readonly Version _osVersion = OperatingSystem.IsWindows() ? GetOSVersion() : Environment.OSVersion.Version;
 
     public static bool IsWindowsNT { get; } = Environment.OSVersion.Platform == PlatformID.Win32NT;
     public static bool IsWindowsXP { get; } = IsWindowsNT && _osVersion == new Version(5, 0);
