@@ -24,6 +24,11 @@ on:
 permissions:
   contents: write
 
+# 同一分支只保留最新一次编译
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: macos-14
@@ -48,6 +53,7 @@ jobs:
 
       - name: 编译 OpenCvSharpExtern
         if: steps.ocv-cache.outputs.cache-hit != 'true'
+        timeout-minutes: 90
         run: |
           brew install ninja
           BetterGenshinImpact.Mac/native/build-opencvsharp.sh "$RUNNER_TEMP/opencv" BetterGenshinImpact.Mac/native/osx-arm64
@@ -69,6 +75,7 @@ jobs:
           fi
 
       - name: 发布
+        timeout-minutes: 20
         run: |
           dotnet publish BetterGenshinImpact.Mac.App/BetterGenshinImpact.Mac.App.csproj \
             -c Release -r osx-arm64 --self-contained \
@@ -77,6 +84,7 @@ jobs:
 
       - name: 单元测试（OpenCV / OCR / 识别）
         continue-on-error: true
+        timeout-minutes: 20
         run: |
           git submodule update --init --depth 1 Test/BetterGenshinImpact.UnitTest/Assets || true
           dotnet build Test/BetterGenshinImpact.Mac.UnitTest -c Release
@@ -84,9 +92,10 @@ jobs:
           mkdir -p "$OUT/runtimes/osx-arm64/native"
           cp BetterGenshinImpact.Mac/native/osx-arm64/libOpenCvSharpExtern.dylib "$OUT/runtimes/osx-arm64/native/"
           cp BetterGenshinImpact.Mac/native/osx-arm64/libOpenCvSharpExtern.dylib "$OUT/"
-          dotnet test Test/BetterGenshinImpact.Mac.UnitTest -c Release --no-build --logger "console;verbosity=minimal"
+          dotnet test Test/BetterGenshinImpact.Mac.UnitTest -c Release --no-build --blame-hang-timeout 5m --logger "console;verbosity=normal"
 
       - name: 打包 BetterGI.app
+        timeout-minutes: 15
         run: |
           BetterGenshinImpact.Mac.App/packaging/make-app.sh "$RUNNER_TEMP/publish" dist "${{ steps.version.outputs.version }}"
 
