@@ -519,7 +519,7 @@ public partial class ScriptControlViewModel : ViewModel
                 {
                     folderNames.Add(project.FolderName);
                     //根据文件夹更新
-                    var dirPath = $@"{MapPathingViewModel.PathJsonPath}\{project.FolderName}";
+                    var dirPath = Path.Combine(MapPathingViewModel.PathJsonPath, Global.NormalizeSeparators(project.FolderName));
                     foreach (var jsonFile in GetJsonFiles(dirPath))
                     {
                         var fileInfo = new FileInfo(jsonFile);

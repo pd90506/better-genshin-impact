@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>BetterGI</string>
+    <key>CFBundleDisplayName</key>
+    <string>BetterGI</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.bettergi.mac</string>
+    <key>CFBundleExecutable</key>
+    <string>BetterGI</string>
+    <key>CFBundleIconFile</key>
+    <string>BetterGI</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleVersion</key>
+    <string>__VERSION__</string>
+    <key>CFBundleShortVersionString</key>
+    <string>__VERSION__</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.games</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>BetterGI 需要切换到 GeForce NOW 窗口，以便向游戏发送键盘和鼠标操作。</string>
+    <key>NSScreenCaptureUsageDescription</key>
+    <string>BetterGI 需要截取游戏画面来识别游戏内容。</string>
+</dict>
+</plist>

@@ -112,7 +112,7 @@ public class FileTreeNodeHelper
     {
         // 匹配路径是否以指定前缀开始，路径分隔符对齐
         return path.StartsWith(fileName, StringComparison.OrdinalIgnoreCase) 
-               && (path.Length == fileName.Length || path[fileName.Length] == '\\');
+               && (path.Length == fileName.Length || path[fileName.Length] is '\\' or '/');
     }
 
     /// <summary>

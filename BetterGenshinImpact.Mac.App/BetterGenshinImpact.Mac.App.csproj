@@ -33,6 +33,13 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 	</ItemGroup>
 
+	<!-- 自行编译的 OpenCvSharpExtern（见 BetterGenshinImpact.Mac/native/build-opencvsharp.sh）：
+	     指定 RID 发布时放在程序目录下，原生库加载时会直接找到 -->
+	<ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
+		<None Include="..\BetterGenshinImpact.Mac\native\$(RuntimeIdentifier)\*.dylib;..\BetterGenshinImpact.Mac\native\$(RuntimeIdentifier)\*.so"
+		      Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\BetterGenshinImpact.Mac\BetterGenshinImpact.Mac.csproj" />
 	</ItemGroup>
