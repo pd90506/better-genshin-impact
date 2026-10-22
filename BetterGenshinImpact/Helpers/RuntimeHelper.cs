@@ -33,6 +33,12 @@ internal static class RuntimeHelper
 
     private static bool GetElevated()
     {
+        if (!OperatingSystem.IsWindows())
+        {
+            // macOS 版通过系统隐私权限控制截图与键鼠，不需要管理员身份
+            return true;
+        }
+
         using WindowsIdentity identity = WindowsIdentity.GetCurrent();
         WindowsPrincipal principal = new(identity);
         return principal.IsInRole(WindowsBuiltInRole.Administrator);

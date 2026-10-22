@@ -1,0 +1,49 @@
+<Project>
+	<!-- Windows/WPF 专属的源码，macOS 版不编译。被核心逻辑引用的类型在 Compat/ 与 Platform/ 中提供替代实现 -->
+	<ItemGroup>
+		<MacExclude Include="..\BetterGenshinImpact\App.xaml.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\AssemblyInfo.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\GlobalUsing.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\View\**\*.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Markup\**\*.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Wine\**\*.cs" />
+		<!-- 云原神网页版（WebView2） -->
+		<MacExclude Include="..\BetterGenshinImpact\Core\Input\Backends\WebSdk\WebView2InputBridge.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\GameTask\Runtime\WebPage\**\*.cs" />
+		<!-- DirectInput / RawInput 监听 -->
+		<MacExclude Include="..\BetterGenshinImpact\Core\Monitor\DirectInputMonitor.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Core\Monitor\RawInputMonitor.cs" />
+		<!-- Windows 专属服务 -->
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\DpiAwareness\**\*.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\Win32\CredentialManagerHelper.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Service\Notifier\WindowsUwpNotifier.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Service\OverlayMetricsService.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Core\Recognition\ONNX\InferenceDeviceDiscovery.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Service\I18n\TExtension.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Service\Model\OverlayMetric\PdhGpuEngineCounterSource.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Service\Model\OverlayMetric\GameGpuUsageProvider.cs" />
+		<!-- 由 Platform/Mac 中同名类型替换的 Windows 实现 -->
+		<MacExclude Include="..\BetterGenshinImpact\GameTask\SystemControl.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\GameTask\Runtime\Win32\Win32GameWindow.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\GameTask\Runtime\Win32\Win32RuntimeProvider.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\GameTask\Runtime\Win32\StarwardPlaytime.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Core\Input\Backends\Win32\**\*.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Core\Simulator\Simulation.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Core\Simulator\PostMessageSimulator.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Core\Simulator\MouseEventSimulator.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\PrimaryScreen.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\DpiHelper.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\DeviceIdHelper.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\Ui\WindowHelper.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\Helpers\Extensions\BitmapExtension.cs" />
+		<!-- Windows 远程桌面子会话 -->
+		<MacExclude Include="..\BetterGenshinImpact\Service\ChildSession\**\*.cs" />
+		<MacExclude Include="..\BetterGenshinImpact\ViewModel\Windows\ChildSessionWindowViewModel.cs" />
+	</ItemGroup>
+	<!-- View 目录中与界面无关、可以直接复用的模型 -->
+	<ItemGroup>
+		<MacViewInclude Include="..\BetterGenshinImpact\View\Controls\Drawer\DrawerViewModel.cs" />
+		<MacViewInclude Include="..\BetterGenshinImpact\View\Controls\Overlay\OverlayLayoutCommittedEventArgs.cs" />
+		<MacViewInclude Include="..\BetterGenshinImpact\View\Converters\CultureInfoNameToKVPConverter.cs" />
+	</ItemGroup>
+</Project>

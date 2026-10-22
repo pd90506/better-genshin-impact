@@ -1,0 +1,16 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.OneDragonTcgPage" x:Name="PageRoot">
+    <StackPanel>
+        <TextBlock
+                Margin="0,0,0,10"
+                FontSize="15"
+                FontWeight="Bold"
+                Text="{Binding Title}" />
+    </StackPanel>
+</UserControl>

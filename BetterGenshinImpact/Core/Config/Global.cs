@@ -27,7 +27,16 @@ public class Global
 
     public static string Absolute(string relativePath)
     {
-        return Path.Combine(StartUpPath, relativePath);
+        return Path.Combine(StartUpPath, NormalizeSeparators(relativePath));
+    }
+
+    /// <summary>
+    /// 统一路径分隔符。代码中的相对路径大多按 Windows 习惯写成反斜杠，
+    /// 在 macOS / Linux 上反斜杠是普通字符，需要换成当前平台的分隔符；Windows 上不做任何改变
+    /// </summary>
+    public static string NormalizeSeparators(string path)
+    {
+        return Path.DirectorySeparatorChar == '\\' ? path : path.Replace('\\', Path.DirectorySeparatorChar);
     }
 
     public static string ScriptPath()

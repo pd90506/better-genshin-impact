@@ -231,7 +231,7 @@ public partial class ScriptGroupProject : ObservableObject
         else if (Type == "Pathing")
         {
             // 加载并执行
-            var task = PathingTask.BuildFromFilePath(Path.Combine(MapPathingViewModel.PathJsonPath, FolderName, Name));
+            var task = PathingTask.BuildFromFilePath(Path.Combine(MapPathingViewModel.PathJsonPath, Global.NormalizeSeparators(FolderName), Name));
             if (task == null)
             {
                 return;

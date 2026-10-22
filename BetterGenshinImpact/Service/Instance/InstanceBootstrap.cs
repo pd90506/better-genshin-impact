@@ -348,6 +348,26 @@ internal static class InstancePipeFactory
 {
     internal static NamedPipeServerStream CreateServer(string pipeName, bool firstPipeInstance)
     {
+        if (!OperatingSystem.IsWindows())
+        {
+            // 非 Windows 平台（macOS 版）不支持管道 ACL，使用 CurrentUserOnly 限制为当前用户
+            var unixOptions = PipeOptions.Asynchronous | PipeOptions.WriteThrough | PipeOptions.CurrentUserOnly;
+            if (firstPipeInstance)
+            {
+                unixOptions |= PipeOptions.FirstPipeInstance;
+                DeleteStaleUnixSocket(pipeName);
+            }
+
+            return new NamedPipeServerStream(
+                pipeName,
+                PipeDirection.InOut,
+                NamedPipeServerStream.MaxAllowedServerInstances,
+                PipeTransmissionMode.Byte,
+                unixOptions,
+                inBufferSize: 16 * 1024,
+                outBufferSize: 16 * 1024);
+        }
+
         using var identity = WindowsIdentity.GetCurrent();
         var ownerSid = identity.User
                        ?? throw new InvalidOperationException("无法取得当前 Windows 用户 SID。");
@@ -378,5 +398,35 @@ internal static class InstancePipeFactory
             inBufferSize: 16 * 1024,
             outBufferSize: 16 * 1024,
             security);
+    }
+
+    /// <summary>
+    /// Unix 上命名管道是临时目录中的套接字文件，进程异常退出后文件不会删除，
+    /// 导致下次启动时 FirstPipeInstance 失败。连接不上时说明没有实例在监听，删除残留文件
+    /// </summary>
+    private static void DeleteStaleUnixSocket(string pipeName)
+    {
+        var path = Path.Combine(Path.GetTempPath(), "CoreFxPipe_" + pipeName);
+        if (!File.Exists(path))
+        {
+            return;
+        }
+
+        try
+        {
+            using var probe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.CurrentUserOnly);
+            probe.Connect(200);
+        }
+        catch (Exception e) when (e is TimeoutException or IOException or UnauthorizedAccessException)
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch (IOException)
+            {
+                // 删除失败时交给后续创建管道的逻辑处理
+            }
+        }
     }
 }

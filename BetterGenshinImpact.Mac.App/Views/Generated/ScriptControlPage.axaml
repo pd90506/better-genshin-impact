@@ -1,0 +1,230 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.ScriptControlPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid Margin="8,0,8,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="16" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Margin="0,8,8,8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="*" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="{DynamicResource ControlStrongFillColorDisabledBrush}" BorderThickness="0,0,0,1">
+                    <TextBlock
+                            FontWeight="SemiBold"
+                            Margin="4,4,8,4"
+                            Text="{i18n:T 配置组}"
+                            TextAlignment="Center" />
+                </Border>
+                <ListBox
+                        Grid.Row="1"
+                        ItemsSource="{Binding ScriptGroups, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedScriptGroup, Mode=TwoWay}"
+                        SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="8,4" Text="{Binding Name, Mode=OneWay}" Foreground="{Binding NextFlag, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='True|Green|@unset'}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding AddScriptGroupCommand}" Header="{i18n:T 新增组}" />
+                            <MenuItem Command="{Binding DeleteScriptGroupCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 删除组}" />
+                            <MenuItem Command="{Binding RenameScriptGroupCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 重命名}" />
+                            <MenuItem Command="{Binding CopyScriptGroupCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 复制组}" />
+                            <MenuItem Command="{Binding AddScriptGroupNextFlagCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 连续任务从此开始执行}" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Button
+                            Grid.Row="0"
+                            Margin="2"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding StartMultiScriptGroupCommand}"
+                            Content="{i18n:T 连续执行}" />
+                    <Button
+                            Grid.Row="1"
+                            Margin="2"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding ContinueMultiScriptGroupCommand}"
+                            Content="{i18n:T 继续执行}" />
+                </Grid>
+            </Grid>
+        </Grid>
+        <GridSplitter
+                Grid.Column="1"
+                Width="12"
+                HorizontalAlignment="Stretch"
+                Background="{DynamicResource ControlStrongFillColorDisabledBrush}"
+                Opacity="0.4" />
+        <Border
+                Grid.Column="2"
+                Margin="6"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1,1,1,1"
+                CornerRadius="8"
+                IsVisible="{Binding SelectedScriptGroup, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='@notnull|False|True'}">
+            <Grid Margin="8,8,0,0">
+                <StackPanel>
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T （实验功能）请在左侧栏选择或新增配置组}" />
+                    <TextBlock Margin="0,0,0,8" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap">
+                        <Run Text="{i18n:T 在左侧栏目右键可以新增/修改配置组，拖拽进行配置组排序。配置组内可以添加并配置软件内的 Javascript 脚本、键鼠脚本等，并能够控制执行次数、顺序等，}" />
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToScriptGroupUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看调度器使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
+                    </TextBlock>
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T 在左侧栏目右键可以新增配置组，或者直接点击下面按钮新增配置组}" />
+                    <Button Margin="0,0,0,12" Command="{Binding AddScriptGroupCommand}" Content="{i18n:T 新增配置组}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border
+                Grid.Column="2"
+                Margin="6"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1,1,1,1"
+                CornerRadius="8"
+                IsVisible="{Binding SelectedScriptGroup, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='@null|False|True'}">
+            <Grid Margin="8,8,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T （实验功能）配置组 - }" />
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{Binding SelectedScriptGroup.Name}" />
+                </StackPanel>
+                <TextBlock
+                        Grid.Row="1"
+                        Margin="0,0,0,8"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        TextWrapping="Wrap"
+                        Text="{i18n:T 在下方列表中右键可以添加配置，拖拽可以调整执行顺序。支持 BetterGI 内的 Javascript 脚本、键鼠录制脚本等，通过调度器可以设置脚本执行次数、顺序等。}" />
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button Command="{Binding StartScriptGroupCommand}" Content="{i18n:T 运行}" />
+                    <Separator Width="10" Opacity="0" />
+                    <DropDownButton Content="{i18n:T 添加}">
+                        <DropDownButton.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="{i18n:T JS脚本}" Command="{Binding AddJsScriptCommand}" />
+                                <MenuItem Header="{i18n:T 地图追踪任务}" Command="{Binding AddPathingCommand}" />
+                                <MenuItem Header="{i18n:T 键鼠脚本}" Command="{Binding AddKmScriptCommand}" />
+                                <MenuItem Header="Shell" Command="{Binding AddShellCommand}" />
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                    <Separator Width="10" Opacity="0" />
+                    <DropDownButton Content="{i18n:T 更多功能}">
+                        <DropDownButton.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="{i18n:T 清空}" Command="{Binding ClearTasksCommand}" />
+                                <MenuItem Header="{i18n:T 日志分析}" Command="{Binding OpenLogParseCommand}" />
+                                <MenuItem Header="{i18n:T 打开脚本仓库}" Command="{Binding OpenLocalScriptRepoCommand}" />
+                                <MenuItem Header="{i18n:T 根据文件夹更新}" Command="{Binding UpdateTasksCommand}" />
+                                <MenuItem Header="{i18n:T 任务倒序排列}" Command="{Binding ReverseTaskOrderCommand}" />
+                                <MenuItem Header="{i18n:T 导出根据控制文件修改任务}" Command="{Binding ExportMergerJsonsCommand}" />
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                    <Separator Width="10" Opacity="0" />
+                    <Button Command="{Binding OpenScriptGroupSettingsCommand}" Content="{i18n:T 设置}" />
+                </StackPanel>
+                <Separator Grid.Row="3" Height="8" Opacity="0" />
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="Col1" Grid.Column="0" />
+                    <Grid x:Name="Col2" Grid.Column="1" />
+                    <Grid x:Name="Col3" Grid.Column="2" />
+                    <Grid x:Name="Col4" Grid.Column="3" />
+                </Grid>
+                <DockPanel Grid.Row="5">
+                    <Grid ColumnDefinitions="*,*,*,*" Margin="12,4" DockPanel.Dock="Top">
+                        <TextBlock Text="#" Grid.Column="0" Classes="caption" />
+                        <TextBlock Text="{i18n:T 名称}" Grid.Column="1" Classes="caption" />
+                        <TextBlock Text="{i18n:T 类型}" Grid.Column="2" Classes="caption" />
+                        <TextBlock Text="{i18n:T 启用状态}" Grid.Column="3" Classes="caption" />
+                    </Grid>
+                    <ListBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            ItemsSource="{Binding SelectedScriptGroup.Projects, Mode=TwoWay}"
+                            SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,*,*,*">
+                                    <TextBlock Text="{Binding Index}" VerticalAlignment="Center" Grid.Column="0" />
+                                    <TextBlock
+                                            Text="{Binding Name}"
+                                            FontSize="14"
+                                            ToolTip.Tip="{Binding FolderName}"
+                                            Foreground="{Binding NextFlag, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='True|Green|@unset'}"
+                                            Grid.Column="1" />
+                                    <TextBlock Text="{Binding TypeDesc}" VerticalAlignment="Center" Grid.Column="2" />
+                                    <ToggleSwitch IsChecked="{Binding Status, Converter={StaticResource BooleanToEnableTextConverter}, Mode=TwoWay}" Grid.Column="3" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding AddJsScriptCommand}" Header="{i18n:T 添加JS脚本}" />
+                                <MenuItem Command="{Binding AddPathingCommand}" Header="{i18n:T 添加地图追踪任务}" />
+                                <MenuItem Command="{Binding AddKmScriptCommand}" Header="{i18n:T 添加键鼠脚本}" />
+                                <MenuItem Command="{Binding AddShellCommand}" Header="{i18n:T 添加Shell}" />
+                                <MenuItem Command="{Binding AddNextFlagCommand}" Header="{i18n:T 下一次任务从此处执行}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" />
+                                <MenuItem Command="{Binding EditScriptCommonCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 修改通用配置}" />
+                                <MenuItem
+                                        Command="{Binding EditJsScriptSettingsCommand}"
+                                        CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}"
+                                        Header="{i18n:T 修改JS脚本自定义配置}"
+                                        IsVisible="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem.Type, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Javascript|True|False'}" />
+                                <MenuItem
+                                        Command="{Binding OpenScriptFolderCommand}"
+                                        CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}"
+                                        Header="{i18n:T 打开所在目录}"
+                                        IsVisible="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem.Type, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Shell|False|True'}" />
+                                <MenuItem Command="{Binding DeleteScriptCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 移除}" />
+                                <MenuItem
+                                        Command="{Binding DeleteScriptByFolderCommand}"
+                                        CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}"
+                                        Header="{i18n:T 根据文件夹移除}"
+                                        IsVisible="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem.Type, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Pathing|True|False'}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                </DockPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

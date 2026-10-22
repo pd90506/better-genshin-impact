@@ -1,0 +1,101 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.MapPathingPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid>
+        <Grid Margin="{StaticResource PagePadding}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                    FontWeight="SemiBold"
+                    Grid.Row="0"
+                    Margin="0,0,0,8"
+                    Text="{i18n:T 地图追踪（实验功能）}" />
+            <TextBlock
+                    Grid.Row="1"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    TextWrapping="Wrap">
+                <Run Text="{i18n:T 可以实现自动采集、自动挖矿、自动锄地等功能。请在调度器中使用！}" />
+                <InlineUIContainer>
+                    <Button Classes="link" Command="{Binding GoToPathingUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                        <TextBlock>
+                            <Run Text="{i18n:T 点击查看地图追踪与录制使用教程}" />
+                        </TextBlock>
+                    </Button>
+                </InlineUIContainer>
+            </TextBlock>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button Command="{Binding OpenScriptsFolderCommand}" Content="{i18n:T 打开任务目录}" />
+                <Button Margin="10,0,0,0" Command="{Binding OpenLocalScriptRepoCommand}">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock Text="{i18n:T 脚本仓库}" />
+                    </Grid>
+                </Button>
+                <Button Margin="10,0,0,0" Command="{Binding OpenSettingsCommand}" Content="{i18n:T 设置}" />
+                <Button Margin="10,0,0,0" Command="{Binding OpenDevToolsCommand}" Content="{i18n:T 开发者工具}" />
+            </StackPanel>
+            <Separator Grid.Row="3" Height="10" Opacity="0" />
+            <Border
+                    Grid.Row="5"
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
+                <Grid Margin="4">
+                    <Grid ColumnDefinitions="*,10" IsVisible="False">
+                        <Grid x:Name="TreeColumnStar" Grid.Column="0" />
+                    </Grid>
+                    <DockPanel>
+                        <Grid ColumnDefinitions="*" Margin="12,4" DockPanel.Dock="Top">
+                            <TextBlock Text="{i18n:T 名称}" Grid.Column="0" Classes="caption" />
+                        </Grid>
+                        <TreeView BorderThickness="0" ItemsSource="{Binding TreeList}" SelectedItem="{Binding SelectNode, Mode=TwoWay}">
+                            <TreeView.ItemTemplate>
+                                <TreeDataTemplate ItemsSource="{Binding Children}">
+                                    <Grid ColumnDefinitions="*">
+                                        <ContentControl Grid.Column="0">
+                                            <ContentControl.Content>
+                                                <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Spacing="8">
+                                                    <Image Height="16" Source="{Binding IconFilePath}" />
+                                                    <TextBlock VerticalAlignment="Center" Text="{Binding FileName}" />
+                                                </StackPanel>
+                                            </ContentControl.Content>
+                                        </ContentControl>
+                                    </Grid>
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
+                            <i:Interaction.Behaviors>
+                                <c:RightPressCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="True" />
+                                <c:ContextMenuClosedCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="False" />
+                                <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                    <ia:InvokeCommandAction Command="{Binding OpenPathingDetailCommand}" CommandParameter="{Binding SelectNode}" />
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                            <TreeView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding StartCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 执行任务}" />
+                                    <MenuItem Command="{Binding RefreshCommand}" Header="{i18n:T 刷新}" />
+                                    <Separator />
+                                    <MenuItem Command="{Binding DeleteCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 删除}" />
+                                </ContextMenu>
+                            </TreeView.ContextMenu>
+                        </TreeView>
+                    </DockPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <c:DrawerHost IsOpen="{Binding DrawerVm.IsDrawerOpen, Mode=TwoWay}" Content="{Binding DrawerVm.DrawerContent}" ZIndex="100" />
+    </Grid>
+</UserControl>

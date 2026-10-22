@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<LangVersion>12.0</LangVersion>
+		<AssemblyName>BetterGI</AssemblyName>
+		<RootNamespace>BetterGenshinImpact.MacApp</RootNamespace>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Version>0.66.2</Version>
+		<InformationalVersion>0.66.2-macos</InformationalVersion>
+		<ApplicationIcon>Assets\logo.ico</ApplicationIcon>
+		<BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+		<!-- 原版 ViewModel 的属性在运行时才知道，页面使用反射绑定 -->
+		<AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+		<RuntimeIdentifiers>osx-arm64;osx-x64;linux-x64</RuntimeIdentifiers>
+		<NoWarn>$(NoWarn);CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8625;CS0618;CA1416;CS1998;AVLN3001;AVLN2208</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.3.13" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.3.13" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.13" />
+		<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.13" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0.6" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.3.13" Condition="'$(Configuration)' == 'Debug'" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+	</ItemGroup>
+
+	<!-- 自行编译的 OpenCvSharpExtern（见 BetterGenshinImpact.Mac/native/build-opencvsharp.sh）：
+	     指定 RID 发布时放在程序目录下，原生库加载时会直接找到 -->
+	<ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
+		<None Include="..\BetterGenshinImpact.Mac\native\$(RuntimeIdentifier)\*.dylib;..\BetterGenshinImpact.Mac\native\$(RuntimeIdentifier)\*.so"
+		      Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BetterGenshinImpact.Mac\BetterGenshinImpact.Mac.csproj" />
+	</ItemGroup>
+
+</Project>

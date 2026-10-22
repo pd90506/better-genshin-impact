@@ -1,0 +1,104 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.JsListPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid>
+        <Grid Margin="{StaticResource PagePadding}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                    FontWeight="SemiBold"
+                    Grid.Row="0"
+                    Margin="0,0,0,8"
+                    Text="{i18n:T 自定义 Javascript 脚本（实验功能）}" />
+            <TextBlock
+                    Grid.Row="1"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    TextWrapping="Wrap">
+                <Run Text="{i18n:T 可以通过 Javascript 调用 BetterGI 在原神中的各项能力。请在调度器中使用！}" />
+                <InlineUIContainer>
+                    <Button Classes="link" Command="{Binding GoToJsScriptUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                        <TextBlock>
+                            <Run Text="{i18n:T 点击查看 Javascript 脚本使用与编写教程}" />
+                        </TextBlock>
+                    </Button>
+                </InlineUIContainer>
+            </TextBlock>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button Command="{Binding OpenScriptsFolderCommand}" Content="{i18n:T 打开脚本目录}" />
+                <Separator Width="10" Opacity="0" />
+                <Button Command="{Binding OpenLocalScriptRepoCommand}">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock Text="{i18n:T 脚本仓库}" />
+                    </Grid>
+                </Button>
+            </StackPanel>
+            <Separator Grid.Row="3" Height="10" Opacity="0" />
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="Col1" Grid.Column="0" />
+                <Grid x:Name="Col2" Grid.Column="1" />
+                <Grid x:Name="Col3" Grid.Column="2" />
+                <Grid x:Name="Col4" Grid.Column="3" />
+            </Grid>
+            <DockPanel Grid.Row="5">
+                <Grid ColumnDefinitions="*,*,*" Margin="12,4" DockPanel.Dock="Top">
+                    <TextBlock Text="{i18n:T 目录}" Grid.Column="0" Classes="caption" />
+                    <TextBlock Text="{i18n:T 名称}" Grid.Column="1" Classes="caption" />
+                    <TextBlock Text="{i18n:T 版本}" Grid.Column="2" Classes="caption" />
+                </Grid>
+                <ListBox
+                        x:Name="ScriptsListView"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        ItemsSource="{Binding ScriptItems}"
+                        SelectedItem="{Binding SelectedScriptProject, Mode=TwoWay}"
+                        SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,*,*">
+                                <TextBlock Text="{Binding FolderName}" VerticalAlignment="Center" Grid.Column="0" />
+                                <TextBlock Text="{Binding Manifest.Name}" VerticalAlignment="Center" Grid.Column="1" />
+                                <TextBlock Text="{Binding Manifest.Version}" VerticalAlignment="Center" Grid.Column="2" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <i:Interaction.Behaviors>
+                        <c:RightPressCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="True" />
+                        <c:ContextMenuClosedCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="False" />
+                        <ia:EventTriggerBehavior EventName="SelectionChanged">
+                            <ia:InvokeCommandAction Command="{Binding OpenScriptDetailDrawerCommand}" CommandParameter="{Binding SelectedItem, ElementName=ScriptsListView}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding OpenScriptProjectFolderCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 打开目录}" />
+                            <MenuItem Command="{Binding StartRunCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 执行脚本}" />
+                            <MenuItem Command="{Binding RefreshCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 刷新}" />
+                            <Separator />
+                            <MenuItem Command="{Binding DeleteScriptCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 删除}" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+            </DockPanel>
+        </Grid>
+        <c:DrawerHost IsOpen="{Binding DrawerVm.IsDrawerOpen, Mode=TwoWay}" Content="{Binding DrawerVm.DrawerContent}" ZIndex="100" />
+    </Grid>
+</UserControl>

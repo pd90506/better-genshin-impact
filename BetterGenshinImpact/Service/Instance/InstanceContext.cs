@@ -89,6 +89,12 @@ internal static class InstancePipeNames
 
     internal static string ForCurrentUser()
     {
+        if (!OperatingSystem.IsWindows())
+        {
+            // 非 Windows 平台（macOS 版）没有 SID，使用当前用户名区分
+            return ForUserSid(Environment.UserName);
+        }
+
         using var identity = WindowsIdentity.GetCurrent();
         var userSid = identity.User
                       ?? throw new InvalidOperationException("无法取得当前 Windows 用户 SID。");

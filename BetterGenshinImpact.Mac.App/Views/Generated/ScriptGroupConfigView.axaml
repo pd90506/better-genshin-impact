@@ -1,0 +1,2295 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:autofight="using:BetterGenshinImpact.GameTask.AutoFight"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.ScriptGroupConfigView" x:Name="PageRoot" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel MaxWidth="700" Margin="{StaticResource PagePadding}">
+                <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 地图追踪行走配置（不启用则使用地图追踪内的条件配置）}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 强制修改行走途中配置开盾/回血等角色在队伍内的编号}" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding PathingConfig.Enabled, Mode=TwoWay}" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 是否开启自动拾取}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 推荐开启以拾取路线中的掉落物、采集物}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding PathingConfig.AutoPickEnabled}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 是否开启自动吃药}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 检测到红血状态时自动使用便携营养袋}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding PathingConfig.AutoEatEnabled}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 切换到队伍的名称（为空则不切换）}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 队伍名称是你在游戏中手动设置的队伍名称文字}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="200"
+                                    Text="{Binding PathingConfig.PartyName}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 切换队伍前强制前往安全的神像区域}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 前往七天神像切换队伍可以避免切换队伍时位于异常状态导致切换失败}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding PathingConfig.IsVisitStatueBeforeSwitchParty}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 【生存位】在队伍内的编号}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 开盾/回血的角色位置，推荐琦良良、莱依拉}"
+                                    TextWrapping="Wrap" />
+                            <ComboBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="100"
+                                    ItemsSource="{Binding PathingConfig.AvatarIndexList}"
+                                    SelectedItem="{Binding PathingConfig.GuardianAvatarIndex}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 【生存位】释放元素战技的间隔（秒）}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 可能要填的时间略大于实际技能CD时间}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="120"
+                                    Text="{Binding PathingConfig.GuardianElementalSkillSecondInterval}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 【生存位】元素战技是否长按}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 钟离长按开盾、琦良良长按变猫等}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding PathingConfig.GuardianElementalSkillLongPress}"
+                                    OffContent="{i18n:T 短按}"
+                                    OnContent="{i18n:T 长按}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 【行走位】主要行走的角色在队伍内的编号}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 推荐和生存位相同，没有特殊需求无需配置}"
+                                    TextWrapping="Wrap" />
+                            <ComboBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="100"
+                                    ItemsSource="{Binding PathingConfig.AvatarIndexList}"
+                                    SelectedItem="{Binding PathingConfig.MainAvatarIndex}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 使用小道具的间隔时间（毫秒）}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 在移动期间自动使用小道具，填0为不使用}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="100"
+                                    Text="{Binding PathingConfig.UseGadgetIntervalMs, Mode=TwoWay}"
+                                    TextWrapping="NoWrap" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 低血量回复时机}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 选择低血量时的回复策略：任何路径点/只在传送点/不回复}"
+                                    TextWrapping="Wrap" />
+                            <ComboBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="100"
+                                    SelectedValueBinding="{Binding Key}"
+                                    DisplayMemberBinding="{Binding Value}"
+                                    ItemsSource="{Binding RecoverTimingSource}"
+                                    SelectedValue="{Binding PathingConfig.RecoverTiming}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 不在某时执行}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 当执行完一个路线后，如果时间为当前配置的时间（范围：0-23），则此地图追踪任务后续都将都跳过，适用于连续执行的兜底任务，例如想通宵挂机，并且在4点后，开始执行新的任务。}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="100"
+                                    Text="{Binding PathingConfig.SkipDuring, Mode=TwoWay}"
+                                    TextWrapping="NoWrap" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 不在连续任务中显示}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 点击连续执行时，不显示该配置组}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding PathingConfig.HideOnRepeat, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Margin="16,8,16,0">
+                            <Expander Classes="card" Margin="0,0,36,0" HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 自动赶路设置}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 选择赶路角色后，在冲刺和奔跑节点大于设定距离时自动执行赶路技能}"
+                                                TextWrapping="Wrap" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16,16,16,10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 赶路角色}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 空选：不进行赶路动作。选择具体角色：使用对应角色。选择自动：优先选择行走位跑图，行走位不支持时尝试使用其他角色。支持的角色列表：玛薇卡、闲云、桑多涅、恰斯卡、流浪者、伊法、希诺宁、法尔伽、夜兰}"
+                                                TextWrapping="Wrap" />
+                                        <ComboBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                ItemsSource="{Binding PathingConfig.HurryOnAvatarList}"
+                                                SelectedItem="{Binding PathingConfig.HurryOnAvatar}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 覆写赶路帧间隔}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 启用赶路逻辑时移速较快，设备性能富余时可选择适当降低帧间隔以提高稳定性，默认值100（ms）}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="60"
+                                                Height="35"
+                                                HorizontalContentAlignment="Center"
+                                                Text="{Binding PathingConfig.HurryOnFrameInterval}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 赶路模式}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 精准靠近：适合采集，节点间减速 / 连续赶路：适合锄地}"
+                                                TextWrapping="Wrap" />
+                                        <ComboBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Width="120"
+                                                ItemsSource="{Binding PathingConfig.TravelModeList}"
+                                                SelectedItem="{Binding PathingConfig.TravelMode}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 赶路启用距离}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 节点距离大于此值时启用赶路技能，填0则关闭}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="60"
+                                                Height="35"
+                                                HorizontalContentAlignment="Center"
+                                                Text="{Binding PathingConfig.Distance}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsApproachStopDistanceVisible}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 接近停车距离}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 到达节点前开始减速/下车/切人的距离，超出自定赶路距离时以前者为准}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="60"
+                                                Height="35"
+                                                HorizontalContentAlignment="Center"
+                                                Text="{Binding PathingConfig.ApproachStopDistance}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsSwitchToWalkVisible}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 接近时切人步行}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 接近节点时切换步行角色}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                IsChecked="{Binding PathingConfig.SwitchToWalkEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsHurryOnMwkOrAuto}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 启用跳飞赶路}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 开启后赶路时启用跳飞}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                IsChecked="{Binding PathingConfig.MwkJumpFlyEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsJumpFlyDistanceVisible}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 跳飞启用距离}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 节点距离大于此值时启用跳飞，需大于赶路启用距离}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="60"
+                                                Height="35"
+                                                HorizontalContentAlignment="Center"
+                                                Text="{Binding PathingConfig.MwkJumpFlyDistance}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsHurryOnMwkOrAutoOrXianyun}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 跳飞/跳跃间隔（秒）}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 跳飞/跳跃赶路间隔，闲云实际使用一半值}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="60"
+                                                Height="35"
+                                                HorizontalContentAlignment="Center"
+                                                Text="{Binding PathingConfig.MwkJumpFlyIntervalSeconds}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsJumpFlySprintCountVisible}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 跳飞前额外冲刺次数}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 6命玛薇卡可选，每次上车后前若干次跳飞改为冲刺跳飞，速度更快，夜魂值消耗更高，推荐3次}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="60"
+                                                Height="35"
+                                                HorizontalContentAlignment="Center"
+                                                Text="{Binding PathingConfig.MwkJumpFlySprintCount}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,10" IsVisible="{Binding IsDisableSprintVisible}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 玛薇卡在车上禁用冲刺}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 0命玛薇卡酌情勾选，节约夜魂值}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,24,0"
+                                                IsChecked="{Binding PathingConfig.MwkDisableSprintEnabled}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,0">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,36,0"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 执行周期配置}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 以天为单位来决定是否执行此配置组}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,24,0"
+                                                IsChecked="{Binding PathingConfig.TaskCycleConfig.Enable, Mode=TwoWay}" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 分界时间}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 分界时间，一般填0或4，如果填0则当天从0点开始算，如果填4，则当天从凌晨4点开始算，小于4点算前一天。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.TaskCycleConfig.BoundaryTime}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 分界时间参考服务器时区}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 启用后，上面的分界时间将基于“服务器时区设置”计算。不启用则使用电脑本地时间（旧版行为）。}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                IsChecked="{Binding PathingConfig.TaskCycleConfig.IsBoundaryTimeBasedOnServerTime}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 周期}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 不同材料有不同的周期，按需配置，如矿石类是3、突破材料是2，或按照自已想几天执行一次配置即可。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.TaskCycleConfig.Cycle}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 执行序号}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 执行周期序号，按时间戳对应的天数(会根据分界时间修正)，对周期求余值加1，得出的值和配置执一致就会执行，否则跳过任务。可以理解为周期内第几天执行。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.TaskCycleConfig.Index}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 计算当天执行序号}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 点击计算按钮，可计算出当天执行序号（今天是周期内的第几天）。}"
+                                                TextWrapping="Wrap" />
+                                        <Button
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,12,0"
+                                                Command="{Binding GetExecutionOrderCommand}"
+                                                Content="{i18n:T 计算}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,0">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,36,0"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 跳过执行配置}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 跳过指定时间内完成的调度器任务（js等未抛出异常则算成功，路径追踪任务，走完最后路径才算成功）的配置}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,24,0"
+                                                IsChecked="{Binding PathingConfig.TaskCompletionSkipRuleConfig.Enable, Mode=TwoWay}" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 跳过执行策略}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 根据不同的策略来跳过任务}"
+                                                TextWrapping="Wrap" />
+                                        <ComboBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="100"
+                                                SelectedValueBinding="{Binding Key}"
+                                                DisplayMemberBinding="{Binding Value}"
+                                                ItemsSource="{Binding SkipPolicySource}"
+                                                SelectedValue="{Binding PathingConfig.TaskCompletionSkipRuleConfig.SkipPolicy}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 分界时间}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 分界时间，一般填0或4，如果填0则当天从0点开始算，如果填4，则当天从凌晨4点开始算，小于4点算前一天，填写小于0的数或大于23，如-1，则不启用，适用于考虑固定刷新时间，且一天内不重复执行的情况。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.TaskCompletionSkipRuleConfig.BoundaryTime}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 分界时间参考服务器时区}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 启用后，上面的分界时间将基于“服务器时区设置”计算。不启用则使用电脑本地时间（旧版行为）。}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                IsChecked="{Binding PathingConfig.TaskCompletionSkipRuleConfig.IsBoundaryTimeBasedOnServerTime}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 和上次运行的间隔秒数}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 和上一次运行时间间隔时间小于配置时间，则跳过执行，小于0时不启用，出于精度考虑，这里使用秒为单位。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.TaskCompletionSkipRuleConfig.LastRunGapSeconds}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 间隔时间计算参照}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 根据配置决定，间隔时间是根据开始时间算，还是根据结束时间算}"
+                                                TextWrapping="Wrap" />
+                                        <ComboBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="100"
+                                                SelectedValueBinding="{Binding Key}"
+                                                DisplayMemberBinding="{Binding Value}"
+                                                ItemsSource="{Binding ReferencePointSource}"
+                                                SelectedValue="{Binding PathingConfig.TaskCompletionSkipRuleConfig.ReferencePoint}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,0,16,8">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,36,0"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 优先执行其他配置组}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 每个任务开始前，会先检查优先执行的其他配置组，是否有任务可以执行，如果可以执行，则会先执行其他配置组的任务，所配置的其他任务组，必须开启跳过执行配置，不支持套娃，才会生效。可用于卡时间、优先材料等提高收益。}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,24,0"
+                                                IsChecked="{Binding PathingConfig.PreExecutionPriorityConfig.Enabled, Mode=TwoWay}" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 配置组名称}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 配置组名，多个用逗号分隔，只有开启跳过执行配置，才会生效。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.PreExecutionPriorityConfig.GroupNames}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 额外执行次数}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 需要优先的任务，在此配置组执行时，最多尝试的额外次数（失败或者CD过短导致依旧满足条件），防止无限循环，另外，此计数关闭任务，继续执行会清空。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.PreExecutionPriorityConfig.MaxRetryCount}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 战斗配置}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 需开启上方地图追踪配置，开启此项可制定战斗配置，关闭此项，则用于独立任务中的配置}" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding PathingConfig.AutoFightEnabled, Mode=TwoWay}">
+                                <i:Interaction.Behaviors>
+                                    <c:CheckedCommandBehavior When="True" Command="{Binding AutoFightEnabledCheckedCommand}" />
+                                </i:Interaction.Behaviors>
+                            </ToggleSwitch>
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 选择战斗策略}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 用于战斗}"
+                                    TextWrapping="Wrap" />
+                            <Button
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,12,0"
+                                    Command="{Binding OpenLocalScriptRepoCommand}"
+                                    Content="{i18n:T 脚本仓库}" />
+                            <Button
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    Margin="0,0,12,0"
+                                    Command="{Binding OpenFightFolderCommand}"
+                                    Content="{i18n:T 打开目录}" />
+                            <ComboBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="3"
+                                    Width="180"
+                                    Margin="0,0,36,0"
+                                    ItemsSource="{Binding AutoFightViewModel.CombatStrategyList}"
+                                    SelectedItem="{Binding PathingConfig.AutoFightConfig.StrategyName, Mode=TwoWay}">
+                                <i:Interaction.Behaviors>
+                                    <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                        <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                                    </ia:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                            </ComboBox>
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 根据技能CD优化出招人员}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 根据填入人或人和cd，来决定当此人元素战技cd未结束时，跳过此人出招，来优化战斗流程，可填入人名或人名数字（用英文逗号分隔），多种用分号分隔，例如：白术；钟离与12。如果人名，则用内置cd检查（或填入数字也小于0），如果是人名和数字，则把数字当做出招cd(秒)。}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    MaxWidth="800"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding PathingConfig.AutoFightConfig.ActionSchedulerByCd, Mode=TwoWay}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                        <Grid Margin="16,10,52,0">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,0,12"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 自动检测战斗结束}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 检测到战斗已经结束的情况下，停止自动战斗功能}"
+                                                TextWrapping="Wrap" />
+                                        <ToggleSwitch
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,24,0"
+                                                IsChecked="{Binding PathingConfig.AutoFightConfig.FightFinishDetectEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Margin="16">
+                                            <Expander
+                                                    Classes="card"
+                                                    Margin="0,0,0,12"
+                                                    IsExpanded="False"
+                                                    HorizontalAlignment="Stretch">
+                                                <Expander.Header>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition />
+                                                            <RowDefinition />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                                Grid.Row="0"
+                                                                Grid.Column="0"
+                                                                Text="{i18n:T 更快触发战斗结束检查}"
+                                                                TextWrapping="Wrap" />
+                                                        <TextBlock
+                                                                Grid.Row="1"
+                                                                Grid.Column="0"
+                                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                Text="{i18n:T 快速检查战斗结束( 默认关闭 )，完成一轮动作后，如果满足条件，则触发一次战斗结束检查。}"
+                                                                TextWrapping="Wrap" />
+                                                        <ToggleSwitch
+                                                                Grid.Row="0"
+                                                                Grid.RowSpan="2"
+                                                                Grid.Column="1"
+                                                                Margin="0,0,36,0"
+                                                                IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.FastCheckEnabled, Mode=TwoWay}" />
+                                                    </Grid>
+                                                </Expander.Header>
+                                                <StackPanel>
+                                                    <Grid Margin="16">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition />
+                                                            <RowDefinition />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                                Grid.Row="0"
+                                                                Grid.Column="0"
+                                                                Text="{i18n:T 更快触发战斗结束检查参数}"
+                                                                TextWrapping="Wrap" />
+                                                        <TextBlock
+                                                                Grid.Row="1"
+                                                                Grid.Column="0"
+                                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                Text="{i18n:T 快速检查战斗结束的参数，填写数字（秒）时距离上次检查超过该时间则触发检查，填写人名时对应角色动作后触发检查。多项时使用分号分隔，格式如5或5;白术;}"
+                                                                TextWrapping="Wrap" />
+                                                        <TextBox
+                                                                Grid.Row="0"
+                                                                Grid.RowSpan="2"
+                                                                Grid.Column="1"
+                                                                MinWidth="180"
+                                                                MaxWidth="800"
+                                                                Margin="0,0,36,0"
+                                                                Text="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.FastCheckParams, Mode=TwoWay}"
+                                                                TextWrapping="Wrap" />
+                                                    </Grid>
+                                                    <Grid Margin="16">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition />
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                            <TextBlock Text="{i18n:T 切人后再执行战斗结束检查}" TextWrapping="Wrap" />
+                                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 将触发战斗结束检查的时机调整为切人后，无需等待上一个动作后摇。目前仅 JSON 策略下生效。}" TextWrapping="Wrap" />
+                                                        </StackPanel>
+                                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.CheckAfterSwitchAvatar, Mode=TwoWay}" />
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Expander>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 敌人可见时跳过战斗结束检查}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 检测到敌人血条时跳过战斗结束检查。与“旋转寻找敌人位置”互斥。}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.SkipFightEndCheckWhenEnemyVisible, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 开战后一段时间阻断战斗结束检查（秒）}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 开战后该时间内的战斗结束检查直接视为战斗未结束，默认为0表示不阻断。}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <NumericUpDown
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Margin="0,0,36,0"
+                                                Value="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.BlockCheckBeforeBattleSeconds, Mode=TwoWay}"
+                                                Minimum="0"
+                                                Maximum="10" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 派蒙辅助检测}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 按L后当派蒙头像可见时提前跳出战斗结束检测。默认开启。}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.PaimonEndCheckEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16" IsVisible="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.PaimonEndCheckEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 派蒙检测延时（秒）}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 按L后等待该时间再检测派蒙头像，默认为0.1秒}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <NumericUpDown
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Margin="0,0,36,0"
+                                                Value="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.PaimonEndCheckDelay, Mode=TwoWay}"
+                                                Minimum="0.05"
+                                                Maximum="0.4" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 旋转寻找敌人位置（实验性功能）}"
+                                                Margin="0,0,5,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                FontSize="9"
+                                                Text="{i18n:T 旋转速度(建议单次360°左右)：}"
+                                                Margin="5,8,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                TextWrapping="Wrap"
+                                                IsVisible="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled}" />
+                                        <Slider
+                                                Grid.Row="0"
+                                                Grid.Column="2"
+                                                Minimum="1"
+                                                Maximum="13"
+                                                Value="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotaryFactor, Mode=TwoWay}"
+                                                Margin="5,0,5,0"
+                                                TickFrequency="1"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled}" />
+                                        <ToggleSwitch Grid.Column="3" Margin="10,0,36,10" IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                    <TextBlock
+                                            Margin="16,0,16,0"
+                                            HorizontalAlignment="Stretch"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{i18n:T (建议配合1秒左右“更快检测结束战斗”) 打开队伍界面检测战斗结束前，先检测敌人，判断是否需靠近敌或旋转寻找敌人。(Q前检查：释放Q技能前检测是否结束战斗。尝试面敌：开战寻敌，战斗尝试面向敌人)}"
+                                            TextWrapping="Wrap"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled}" />
+                                    <Grid Margin="16,0,16,16" IsVisible="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T Q前检测}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 释放Q技能前检测是否结束战斗}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                IsEnabled="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled, Mode=TwoWay}"
+                                                IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.CheckBeforeBurst, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,0,16,16" IsVisible="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 尝试面敌}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 开战寻敌，战斗尝试面向敌人}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                IsEnabled="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.RotateFindEnemyEnabled, Mode=TwoWay}"
+                                                IsChecked="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.IsFirstCheck, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 检查战斗结束的延时}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 触发战斗结束检查时，先等待该延时以确保角色动作后摇结束。也可为角色单独指定延时，格式如 0.4 或 0.4;钟离与1.5}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.CheckEndDelay}" />
+                                    </Grid>
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 按键触发后检查延时}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 按下切换队伍后去检查屏幕色块的延时，默认为0.45秒。若出现无法结束战斗可以适当提高这个值，比如0.75。但不要太大，确保这个延时不会真的把队伍配置界面切出来。}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Row="0"
+                                                Grid.RowSpan="2"
+                                                Grid.Column="1"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.AutoFightConfig.FinishDetectConfig.BeforeDetectDelay}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,10,52,0">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,0,12"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 战斗中视觉识别配置}"
+                                                TextWrapping="Wrap" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16,12,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 战斗中持续索敌}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 战斗过程中情况允许时持续尝试面朝敌人}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.EnableCombatTargeting, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,4,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 脱锁等待时间（秒）}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 敌人不可见时等待一定时间后开始旋转索敌}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBox
+                                                Grid.Column="1"
+                                                Width="120"
+                                                Margin="0,0,36,0"
+                                                Text="{Binding PathingConfig.AutoFightConfig.LockLostWaitTime}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 伤害数字识别模式}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 当血条不可见或传奇等固定位置血条时使用伤害数字辅助定位敌人}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ComboBox
+                                                Grid.Column="1"
+                                                Width="120"
+                                                Margin="0,0,36,0"
+                                                SelectedValue="{Binding PathingConfig.AutoFightConfig.DamageNumberRecognitionMode, Mode=TwoWay}"
+                                                SelectedValueBinding="{Binding Tag}">
+                                            <ComboBoxItem Tag="{x:Static autofight:DamageNumberRecognitionMode.Disabled}" Content="{i18n:T 禁用}" />
+                                            <ComboBoxItem Tag="{x:Static autofight:DamageNumberRecognitionMode.Ocr}" Content="{i18n:T OCR识别}" />
+                                            <ComboBoxItem Tag="{x:Static autofight:DamageNumberRecognitionMode.Color}" Content="{i18n:T 颜色识别}" />
+                                        </ComboBox>
+                                    </Grid>
+                                    <Grid Margin="16,8,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 索敌识别间隔（毫秒）}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 每次索敌识别之间的间隔时间}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBox
+                                                Grid.Column="1"
+                                                Width="120"
+                                                Margin="0,0,36,0"
+                                                Text="{Binding PathingConfig.AutoFightConfig.TargetingDetectionInterval}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 绘制识别结果位置}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 在遮罩窗口上显示血条、伤害数字等识别结果的边框}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.DrawRecognitionResults, Mode=TwoWay}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,10,52,0">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,0,12"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 盾奶位角色优先释放技能}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 战斗过程实时检测和释放盾奶位角E战技（空选为关闭此功能）}"
+                                                TextWrapping="Wrap" />
+                                    </Grid>
+                                </Expander.Header>
+                                <Grid Margin="16">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Text="{i18n:T 盾奶位角色在队伍中的位置}"
+                                            TextWrapping="Wrap" />
+                                    <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{i18n:T 实时检测盾奶位技能情况}"
+                                            TextWrapping="Wrap" />
+                                    <ComboBox
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Margin="10,0,10,0"
+                                            ItemsSource="{Binding PathingConfig.AvatarIndexList}"
+                                            SelectedItem="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Mode=TwoWay}" />
+                                    <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Margin="0,0,8,0"
+                                            HorizontalAlignment="Right"
+                                            Text="{i18n:T 禁用该角色战斗策略}"
+                                            TextWrapping="Wrap" />
+                                    <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="0,0,10,0"
+                                            HorizontalAlignment="Right"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{i18n:T 自动释放E或Q战技}"
+                                            TextWrapping="Wrap" />
+                                    <TextBlock
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="3"
+                                            Margin="0,0,5,30"
+                                            FontSize="8"
+                                            HorizontalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{i18n:T E战技}"
+                                            TextWrapping="Wrap" />
+                                    <ToggleSwitch
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="3"
+                                            Margin="0,0,5,0"
+                                            IsChecked="{Binding PathingConfig.AutoFightConfig.GuardianCombatSkip, Mode=TwoWay}"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
+                                    <TextBlock
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="4"
+                                            Margin="0,0,36,30"
+                                            FontSize="8"
+                                            HorizontalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{i18n:T Q爆发}"
+                                            TextWrapping="Wrap" />
+                                    <ToggleSwitch
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="4"
+                                            Margin="0,0,5,0"
+                                            IsChecked="{Binding PathingConfig.AutoFightConfig.BurstEnabled, Mode=TwoWay}"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
+                                    <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="4"
+                                            Margin="0,10,10,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Text="{i18n:T 检测盾奶位战技短按或长按，禁用:短按 / 启用:长按}"
+                                            TextWrapping="Wrap" />
+                                    <ToggleSwitch
+                                            Grid.Row="2"
+                                            Grid.Column="4"
+                                            Margin="0,10,36,0"
+                                            VerticalAlignment="Center"
+                                            IsChecked="{Binding PathingConfig.AutoFightConfig.GuardianAvatarHold, Mode=TwoWay}"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
+                                </Grid>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,10,52,0">
+                            <Expander
+                                    Classes="card"
+                                    Margin="0,0,0,12"
+                                    IsExpanded="False"
+                                    HorizontalAlignment="Stretch">
+                                <Expander.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Text="{i18n:T 战斗后拾取动作}"
+                                                TextWrapping="Wrap" />
+                                        <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 战斗后执行的动作便于拾取掉落物}"
+                                                TextWrapping="Wrap" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Grid Margin="16,12,16,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 扫描掉落物光柱}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 战斗结束后旋转视角寻找掉落物光柱并靠近（仅在无万叶和琴时备用）}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.PickDropsAfterFightEnabled}" />
+                                    </Grid>
+                                    <Grid Margin="16,4,16,12" IsVisible="{Binding PathingConfig.AutoFightConfig.PickDropsAfterFightEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{i18n:T 扫描掉落物光柱最大时长}"
+                                                TextWrapping="Wrap" />
+                                        <TextBox
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.AutoFightConfig.PickDropsAfterFightSeconds}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 聚集材料动作}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 战斗结束后，如存在(万叶/琴)，则执行长E聚集材料动作}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.KazuhaPickupEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,4,16,12" IsVisible="{Binding PathingConfig.AutoFightConfig.KazuhaPickupEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 二次拾取}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 琴首次拾取空，再次拾取。即使万叶刚使用过技能，也会强制再次拾取。}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                IsEnabled="{Binding PathingConfig.AutoFightConfig.KazuhaPickupEnabled, Mode=TwoWay}"
+                                                IsChecked="{Binding PathingConfig.AutoFightConfig.QinDoublePickUp, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 基于经验值判断拾取(经验值57/58/60，不含传奇120等数字)}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 未能检测到经验值图标时跳过战斗后拾取动作}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding PathingConfig.AutoFightConfig.ExpBasedPickupEnabled, Mode=TwoWay}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 拾取战斗人次阈值}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 当战斗人次小于一定次数时，不触发拾取掉落物和万叶拾取配置，只有不小于2时才生效}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBox
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.AutoFightConfig.BattleThresholdForLoot}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 只拾取精英掉落模式}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 需要路径文件支持，需勾选区分怪物拾取才生效。只拾取标记为精英或传奇的点位}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ComboBox
+                                                Grid.Column="1"
+                                                MinWidth="100"
+                                                Margin="0,0,36,0"
+                                                SelectedValueBinding="{Binding Key}"
+                                                DisplayMemberBinding="{Binding Value}"
+                                                ItemsSource="{Binding OnlyPickEliteDropsSource}"
+                                                SelectedValue="{Binding PathingConfig.AutoFightConfig.OnlyPickEliteDropsMode}" />
+                                    </Grid>
+                                    <Grid Margin="16,8,16,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{i18n:T 万叶拾取队伍名}" TextWrapping="Wrap" />
+                                            <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 战斗结束后，如果不存在万叶，则切换至存在万叶的队伍}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBox
+                                                Grid.Column="1"
+                                                Margin="0,0,36,0"
+                                                MinWidth="120"
+                                                Text="{Binding PathingConfig.AutoFightConfig.KazuhaPartyName}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                        </Grid>
+                        <Grid Margin="16,10,16,16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 自动战斗超时(秒)}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 到达指定时间后，自动停止战斗}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    HorizontalContentAlignment="Center"
+                                    Margin="10,0,20,0"
+                                    MinWidth="50"
+                                    Text="{Binding PathingConfig.AutoFightConfig.Timeout}" />
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Text="{i18n:T 游泳检测(自动战斗过程中)}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 先回战斗节点，失败则去七天神像}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="3"
+                                    Margin="10,0,36,0"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="{Binding PathingConfig.AutoFightConfig.SwimmingEnabled, Mode=TwoWay}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text=""
+                                    TextWrapping="Wrap">
+                                <Run Text="{i18n:T 自动吃食物配置 -}" />
+                                <InlineUIContainer>
+                                    <Button Classes="link" Command="{Binding GoToAutoEatUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                        <TextBlock>
+                                            <Run Text="{i18n:T 点击查看调用方法}" />
+                                        </TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
+                            </TextBlock>
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 供JS脚本调用Buff类食物配置；食物名称会忽略“美味的”等前缀，请填不带前缀的名称}" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 默认的攻击类料理名称}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 入参 foodEffectType 为 1 时使用}" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    MaxWidth="800"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding PathingConfig.AutoEatConfig.DefaultAtkBoostingDishName, Mode=TwoWay}"
+                                    TextWrapping="Wrap"
+                                    Cursor="IBeam" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 默认的冒险类料理名称}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 入参 foodEffectType 为 2 时使用}" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    MaxWidth="800"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding PathingConfig.AutoEatConfig.DefaultAdventurersDishName, Mode=TwoWay}"
+                                    TextWrapping="Wrap"
+                                    Cursor="IBeam" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 默认的防御类料理名称}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 入参 foodEffectType 为 3 时使用}" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    MaxWidth="800"
+                                    Margin="0,0,36,0"
+                                    Text="{Binding PathingConfig.AutoEatConfig.DefaultDefBoostingDishName, Mode=TwoWay}"
+                                    TextWrapping="Wrap"
+                                    Cursor="IBeam" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander Classes="card" Margin="0,0,0,12" HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T Shell执行配置}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{i18n:T 在本组中执行Shell命令会使用这里的配置。如关闭此项，则使用默认配置。}" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,24,0"
+                                    IsChecked="{Binding ScriptGroupConfig.EnableShellConfig, Mode=TwoWay}" />
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 禁用Shell任务}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 如果打开，则Shell任务会被跳过执行}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding ShellConfig.Disable}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T Shell执行超时}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 最长等待命令返回的时间，单位秒。如果时间小于等于0则不等待，直接返回。}"
+                                    TextWrapping="Wrap" />
+                            <TextBox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MinWidth="120"
+                                    Text="{Binding ShellConfig.Timeout}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 隐藏命令执行窗口}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 推荐启用，不然会有一个大黑框。}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding ShellConfig.NoWindow}" />
+                        </Grid>
+                        <Grid Margin="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 在Log中记录命令输出}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 打开的话若命令有输出会在Log中显示，关闭则不显示。(只有命令执行成功且有输出才会显示)}"
+                                    TextWrapping="Wrap" />
+                            <ToggleSwitch
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding ShellConfig.Output}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

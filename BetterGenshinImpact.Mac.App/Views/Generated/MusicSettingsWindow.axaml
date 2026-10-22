@@ -1,0 +1,219 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.MusicSettingsWindow"
+        x:Name="PageRoot"
+        Width="720"
+        Height="760"
+        MinWidth="600"
+        MinHeight="520"
+        FontFamily="{StaticResource TextThemeFontFamily}"
+        Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ScrollViewer
+                Grid.Row="1"
+                Margin="24,8,24,24"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Border Margin="0,0,0,12">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock FontWeight="SemiBold" Text="{i18n:T 输出设置}" />
+                                <TextBlock
+                                        Margin="0,3,0,0"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{i18n:T 设置当前曲目的乐器档案与移调；可在下方启用自动换乐器}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Margin="1,0,0,6" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{i18n:T 乐器档案}" />
+                                <ComboBox DisplayMemberBinding="{Binding Name}" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedInstrumentProfile}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Margin="1,0,0,6" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{i18n:T 半音移调}" />
+                                <NumericUpDown
+                                        Maximum="24"
+                                        Minimum="-24"
+                                        Increment="1"
+                                        Value="{Binding Transpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border Margin="0,0,0,12">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock FontWeight="SemiBold" Text="{i18n:T 演奏控制}" />
+                                <TextBlock
+                                        Margin="0,3,0,0"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{i18n:T 覆盖曲谱速度，并在每次需要时自动准备对应乐器}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="160" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <CheckBox Content="{i18n:T 使用自定义 BPM}" IsChecked="{Binding Config.MusicConfig.UseCustomBpm, Mode=TwoWay}" />
+                                <TextBlock
+                                        Margin="22,3,8,0"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{i18n:T 按曲谱原 BPM 等比例调整整首曲目的播放速度}" />
+                            </StackPanel>
+                            <NumericUpDown
+                                    Grid.Column="1"
+                                    IsEnabled="{Binding Config.MusicConfig.UseCustomBpm}"
+                                    Maximum="1000"
+                                    Minimum="1"
+                                    Increment="1"
+                                    Value="{Binding Config.MusicConfig.CustomBpm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                        <Separator Margin="0,14" />
+                        <CheckBox Content="{i18n:T 演奏前自动更换乐器}" IsChecked="{Binding Config.MusicConfig.AutoSwitchInstrument, Mode=TwoWay}" />
+                        <TextBlock
+                                Margin="22,3,0,0"
+                                FontSize="12"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{i18n:T 自动打开背包、装备当前输出乐器并使用；支持内置的十种乐器档案}" />
+                    </StackPanel>
+                </Border>
+                <Border Margin="0,0,0,12">
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{i18n:T MIDI 轨道}" />
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel Margin="0,14,0,0">
+                            <TextBlock Margin="0,0,0,8" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 单独启用轨道，并查看音域与映射命中率。}" />
+                            <ItemsControl ItemsSource="{Binding SelectedMusicItem.Tracks}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                                Margin="0,2"
+                                                Padding="10,8"
+                                                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                                CornerRadius="7">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsEnabled, Mode=TwoWay}">
+                                                    <i:Interaction.Behaviors>
+                                                        <ia:EventTriggerBehavior EventName="Click">
+                                                            <ia:InvokeCommandAction Command="{Binding #PageRoot.DataContext.UpdateTrackSelectionCommand}" />
+                                                        </ia:EventTriggerBehavior>
+                                                    </i:Interaction.Behaviors>
+                                                </CheckBox>
+                                                <TextBlock
+                                                        Grid.Column="1"
+                                                        Margin="8,0"
+                                                        VerticalAlignment="Center"
+                                                        Text="{Binding Name}" />
+                                                <TextBlock Grid.Column="2" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                    <Run Text="{Binding MinNoteNumber, Mode=OneWay}" />
+                                                    <Run Text="–" />
+                                                    <Run Text="{Binding MaxNoteNumber, Mode=OneWay}" />
+                                                    <Run Text=" · " />
+                                                    <Run Text="{Binding PlayableRatioText, Mode=OneWay}" />
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Expander>
+                </Border>
+                <Border>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{i18n:T 音高映射}" />
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel Margin="0,14,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center" Text="{i18n:T 映射模式}" />
+                                <ComboBox
+                                        Grid.Column="1"
+                                        Margin="12,0,0,0"
+                                        ItemsSource="{Binding MappingModes}"
+                                        SelectedItem="{Binding SelectedInstrumentProfile.MappingMode}" />
+                            </Grid>
+                            <ItemsControl Margin="0,10,0,0" ItemsSource="{Binding SelectedInstrumentProfile.Mappings}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="3" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,3,8,3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="24" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Key}" />
+                                            <NumericUpDown
+                                                    Grid.Column="1"
+                                                    Maximum="127"
+                                                    Minimum="0"
+                                                    Increment="1"
+                                                    Value="{Binding MidiNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Button
+                                    Classes="accent"
+                                    Margin="0,10,0,0"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding SaveProfilesCommand}"
+                                    Content="{i18n:T 保存映射}" />
+                        </StackPanel>
+                    </Expander>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

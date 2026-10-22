@@ -1,0 +1,187 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    xmlns:local="using:BetterGenshinImpact.Model"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.PathingConfigView" x:Name="PageRoot" Width="1000" Height="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="12,0">
+                <StackPanel Margin="10,5">
+                    <TextBlock
+                            FontWeight="SemiBold"
+                            Margin="0,0,0,8"
+                            FontSize="16"
+                            Text="{i18n:T 地图追踪设置（相关配置优先级从高到低）}" />
+                </StackPanel>
+                <Border Classes="card" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T 队伍切换设置（路径中存在符合条件的动作、采集物的情况下，自动切换至对应队伍）}" />
+                        <ItemsControl ItemsSource="{Binding Config.PathingConditionConfig.PartyConditions, Mode=TwoWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel Margin="0,0,0,10">
+                                        <ComboBox
+                                                MinWidth="100"
+                                                Margin="0,0,10,5"
+                                                HorizontalAlignment="Left"
+                                                ItemsSource="{Binding Source={x:Static local:ConditionDefinitions.PartySubjects}}"
+                                                SelectedItem="{Binding Subject, Mode=TwoWay}" />
+                                        <ComboBox
+                                                MinWidth="80"
+                                                Margin="0,0,10,5"
+                                                HorizontalAlignment="Left"
+                                                ItemsSource="{Binding Definition.PredicateOptions}"
+                                                SelectedItem="{Binding Predicate, Mode=TwoWay}" />
+                                        <c:MultiSelectComboBox
+                                                Width="300"
+                                                MinWidth="300"
+                                                ItemsSource="{Binding Definition.ObjectOptions}"
+                                                SelectedItems="{Binding Object, Mode=TwoWay}" />
+                                        <TextBlock
+                                                Margin="10,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 则切换到队伍}" />
+                                        <TextBox MinWidth="160" Margin="0,0,10,0" Text="{Binding Result, Mode=TwoWay}" />
+                                        <Button Command="{Binding $parent[ItemsControl].DataContext.RemovePartyConditionConfigCommand}" CommandParameter="{Binding}" Content="{i18n:T 删除}" />
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button HorizontalAlignment="Left" Command="{Binding AddPartyConditionConfigCommand}" Content="{i18n:T + 添加条件}" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T 角色设置（存在多个符合条件的角色情况下，优先使用游戏内编队编号更小的）}" />
+                        <ItemsControl ItemsSource="{Binding Config.PathingConditionConfig.AvatarConditions, Mode=TwoWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel Margin="0,0,0,10">
+                                        <ComboBox
+                                                MinWidth="100"
+                                                Margin="0,0,10,5"
+                                                HorizontalAlignment="Left"
+                                                ItemsSource="{Binding Source={x:Static local:ConditionDefinitions.AvatarSubjects}}"
+                                                SelectedItem="{Binding Subject, Mode=TwoWay}" />
+                                        <ComboBox
+                                                MinWidth="80"
+                                                Margin="0,0,10,5"
+                                                HorizontalAlignment="Left"
+                                                ItemsSource="{Binding Definition.PredicateOptions}"
+                                                SelectedItem="{Binding Predicate}" />
+                                        <Grid Width="300" MinWidth="300">
+                                            <c:MultiSelectComboBox ItemsSource="{Binding Definition.ObjectOptions}" SelectedItems="{Binding Object, Mode=TwoWay}" />
+                                        </Grid>
+                                        <TextBlock
+                                                Margin="10,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{i18n:T 则角色执行}" />
+                                        <ComboBox
+                                                MinWidth="160"
+                                                Margin="0,0,10,0"
+                                                HorizontalAlignment="Left"
+                                                ItemsSource="{Binding Source={x:Static local:ConditionDefinitions.AvatarResultList}}"
+                                                SelectedItem="{Binding Result}" />
+                                        <Button Command="{Binding $parent[ItemsControl].DataContext.RemoveAvatarConditionConfigCommand}" CommandParameter="{Binding}" Content="{i18n:T 删除}" />
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button HorizontalAlignment="Left" Command="{Binding AddAvatarConditionConfigCommand}" Content="{i18n:T + 添加条件}" />
+                    </StackPanel>
+                </Border>
+                <c:CardControl Margin="0,0,0,12">
+                    <c:CardControl.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 使用小道具的间隔时间（毫秒）}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 在移动期间自动使用小道具，填0为不使用}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                    </c:CardControl.Header>
+                    <TextBox
+                            MinWidth="100"
+                            Margin="0,0,36,0"
+                            Text="{Binding Config.PathingConditionConfig.UseGadgetIntervalMs, Mode=TwoWay}"
+                            TextWrapping="NoWrap" />
+                </c:CardControl>
+                <c:CardControl Margin="0,0,0,12">
+                    <c:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 开启自动吃药}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 检测到红血状态时自动使用便携营养袋}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                    </c:CardControl.Header>
+                    <ToggleSwitch Margin="0,0,36,0" IsChecked="{Binding Config.PathingConditionConfig.AutoEatEnabled, Mode=TwoWay}" />
+                </c:CardControl>
+                <c:CardControl Margin="0,0,0,6">
+                    <c:CardControl.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{i18n:T 低血量回复时机}"
+                                    TextWrapping="Wrap" />
+                            <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{i18n:T 选择低血量时的回复策略：任何路径点/只在传送点/不回复}"
+                                    TextWrapping="Wrap" />
+                        </Grid>
+                    </c:CardControl.Header>
+                    <ComboBox
+                            MinWidth="100"
+                            Margin="0,0,36,0"
+                            SelectedValueBinding="{Binding Key}"
+                            DisplayMemberBinding="{Binding Value}"
+                            ItemsSource="{Binding RecoverTimingSource}"
+                            SelectedValue="{Binding Config.PathingConditionConfig.RecoverTiming}" />
+                </c:CardControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

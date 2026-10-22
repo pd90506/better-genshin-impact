@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:BetterGenshinImpact.MacApp.Views.Pages"
+             x:Class="BetterGenshinImpact.MacApp.Views.Pages.ScriptRepoPage"
+             x:DataType="p:ScriptRepoViewModel"
+             FontFamily="{StaticResource TextThemeFontFamily}"
+             Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <DockPanel Margin="{StaticResource PagePadding}">
+        <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="0,0,0,10">
+            <TextBlock Classes="title" Text="脚本仓库" />
+
+            <!-- 更新仓库 -->
+            <Border Classes="card">
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="Auto,140,*,Auto,Auto" ColumnSpacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="更新渠道" />
+                        <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding Channels}" SelectedItem="{Binding SelectedChannel}" />
+                        <TextBox Grid.Column="2" Text="{Binding RepoUrl}" IsReadOnly="{Binding !IsCustomChannel}" />
+                        <Button Grid.Column="3" Classes="accent" Content="⟳ 更新仓库" Command="{Binding UpdateRepoCommand}" IsEnabled="{Binding !IsUpdating}" />
+                        <Button Grid.Column="4" Content="重置" Command="{Binding ResetRepoCommand}" IsEnabled="{Binding !IsUpdating}" />
+                    </Grid>
+                    <StackPanel Spacing="4" IsVisible="{Binding IsUpdating}">
+                        <ProgressBar Value="{Binding ProgressValue}" Maximum="100" />
+                        <TextBlock Classes="caption" Text="{Binding ProgressText}" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                    <TextBlock Classes="caption" Text="{Binding RepoStatus}" TextWrapping="Wrap" />
+                    <WrapPanel>
+                        <Button Margin="0,0,8,0" Content="更新已订阅的脚本" Command="{Binding UpdateSubscribedCommand}" />
+                        <Button Margin="0,0,8,0" Content="从压缩包导入仓库" Command="{Binding ImportZipCommand}" />
+                        <Button Margin="0,0,8,0" Content="打开 BetterGI 官网" Command="{Binding OpenOnlineRepoCommand}" />
+                        <Button Content="打开脚本文件夹" Command="{Binding OpenUserFolderCommand}" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- 订阅链接 -->
+            <Border Classes="card">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="导入" Command="{Binding ImportLinkCommand}" />
+                    <TextBox Text="{Binding ImportLink}" Watermark="粘贴订阅链接：bettergi://script?import=…" />
+                </DockPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- 已订阅 -->
+        <Border DockPanel.Dock="Bottom" Classes="card" Margin="0,10,0,0">
+            <TextBlock Text="{Binding SubscribedText}" TextWrapping="Wrap" MaxHeight="80" />
+        </Border>
+
+        <!-- 本地仓库浏览 -->
+        <Border Classes="card" Padding="0">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top" Margin="12,10">
+                    <Button DockPanel.Dock="Right" Classes="accent" Content="＋ 订阅所选" Command="{Binding SubscribeSelectedCommand}" />
+                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap"
+                               Text="选择文件夹或脚本后点击「订阅所选」，脚本会复制到本地，之后可在「地图追踪」「JS 脚本」「调度器」「一条龙」中使用。" />
+                </DockPanel>
+                <TreeView ItemsSource="{Binding Roots}" SelectedItem="{Binding SelectedNode}">
+                    <TreeView.Styles>
+                        <Style Selector="TreeViewItem" x:DataType="p:RepoNode">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        </Style>
+                    </TreeView.Styles>
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate DataType="p:RepoNode" ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Icon}" />
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </DockPanel>
+        </Border>
+    </DockPanel>
+</UserControl>

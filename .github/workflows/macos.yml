@@ -1,0 +1,113 @@
+name: macOS
+
+# 编译 macOS 版 BetterGI.app（Apple Silicon）
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'claude/**'
+      - 'mac/**'
+    tags:
+      - 'mac-v*'
+    paths:
+      - 'BetterGenshinImpact/**'
+      - 'BetterGenshinImpact.Mac/**'
+      - 'BetterGenshinImpact.Mac.App/**'
+      - 'Fischless.*/**'
+      - '.github/workflows/macos.yml'
+  pull_request:
+    paths:
+      - 'BetterGenshinImpact.Mac/**'
+      - 'BetterGenshinImpact.Mac.App/**'
+      - '.github/workflows/macos.yml'
+
+permissions:
+  contents: write
+
+# 同一分支只保留最新一次编译
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 150
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # OpenCvSharpExtern 从源码编译（约 30 分钟），按编译脚本内容缓存
+      - name: 缓存 OpenCvSharpExtern
+        id: ocv-cache
+        uses: actions/cache@v4
+        with:
+          path: BetterGenshinImpact.Mac/native/osx-arm64
+          key: opencvsharp-osx-arm64-${{ hashFiles('BetterGenshinImpact.Mac/native/build-opencvsharp.sh') }}
+
+      - name: 编译 OpenCvSharpExtern
+        if: steps.ocv-cache.outputs.cache-hit != 'true'
+        timeout-minutes: 90
+        run: |
+          brew install ninja
+          BetterGenshinImpact.Mac/native/build-opencvsharp.sh "$RUNNER_TEMP/opencv" BetterGenshinImpact.Mac/native/osx-arm64
+
+      - name: 检查原生库依赖（只能依赖系统库）
+        run: |
+          otool -L BetterGenshinImpact.Mac/native/osx-arm64/libOpenCvSharpExtern.dylib
+          if otool -L BetterGenshinImpact.Mac/native/osx-arm64/libOpenCvSharpExtern.dylib | tail -n +2 | grep -vE '/usr/lib/|/System/Library/|@rpath/libOpenCvSharpExtern'; then
+            echo "libOpenCvSharpExtern.dylib 依赖了非系统库" && exit 1
+          fi
+
+      - name: 版本号
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/mac-v* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/mac-v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=0.66.2.${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 发布
+        timeout-minutes: 20
+        run: |
+          dotnet publish BetterGenshinImpact.Mac.App/BetterGenshinImpact.Mac.App.csproj \
+            -c Release -r osx-arm64 --self-contained \
+            -o "$RUNNER_TEMP/publish"
+          test -f "$RUNNER_TEMP/publish/libOpenCvSharpExtern.dylib"
+
+      - name: 单元测试（OpenCV / OCR / 识别）
+        continue-on-error: true
+        timeout-minutes: 20
+        run: |
+          git submodule update --init --depth 1 Test/BetterGenshinImpact.UnitTest/Assets || true
+          dotnet build Test/BetterGenshinImpact.Mac.UnitTest -c Release
+          OUT=Test/BetterGenshinImpact.Mac.UnitTest/bin/Release/net8.0
+          mkdir -p "$OUT/runtimes/osx-arm64/native"
+          cp BetterGenshinImpact.Mac/native/osx-arm64/libOpenCvSharpExtern.dylib "$OUT/runtimes/osx-arm64/native/"
+          cp BetterGenshinImpact.Mac/native/osx-arm64/libOpenCvSharpExtern.dylib "$OUT/"
+          dotnet test Test/BetterGenshinImpact.Mac.UnitTest -c Release --no-build --blame-hang-timeout 5m --logger "console;verbosity=normal"
+
+      - name: 打包 BetterGI.app
+        timeout-minutes: 15
+        run: |
+          BetterGenshinImpact.Mac.App/packaging/make-app.sh "$RUNNER_TEMP/publish" dist "${{ steps.version.outputs.version }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BetterGI-macOS-arm64
+          path: dist/BetterGI-macOS.zip
+          if-no-files-found: error
+
+      - name: 发布 Release
+        if: startsWith(github.ref, 'refs/tags/mac-v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/BetterGI-macOS.zip
+          prerelease: true

@@ -1,0 +1,122 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+             xmlns:p="using:BetterGenshinImpact.MacApp.Views.Pages"
+             mc:Ignorable="d"
+             x:Class="BetterGenshinImpact.MacApp.Views.Pages.MacHomePage"
+             x:DataType="p:MacHomeViewModel"
+             FontFamily="{StaticResource TextThemeFontFamily}"
+             Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="{StaticResource PagePadding}" Spacing="12" MaxWidth="980" HorizontalAlignment="Left">
+
+            <!-- 横幅 -->
+            <Border CornerRadius="8" ClipToBounds="True" Height="150">
+                <Grid>
+                    <Image Source="avares://BetterGI/Assets/banner.jpg" Stretch="UniformToFill" />
+                    <Border Background="#66000000" />
+                    <StackPanel VerticalAlignment="Bottom" Margin="20,0,20,16" Spacing="2">
+                        <TextBlock Text="BetterGI · 更好的原神" FontSize="26" FontWeight="SemiBold" Foreground="White" />
+                        <TextBlock Text="macOS 版 · 支持 GeForce NOW 云游戏" Foreground="#DDFFFFFF" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 第 1 步：权限 -->
+            <Border Classes="card">
+                <StackPanel Spacing="8">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center"
+                                   Text="✅ 已全部授权" IsVisible="{Binding AllPermissionsGranted}" Foreground="{DynamicResource SystemFillColorSuccessBrush}" />
+                        <TextBlock Classes="subtitle" Text="① 授予 macOS 权限" />
+                    </DockPanel>
+                    <TextBlock Classes="caption" TextWrapping="Wrap"
+                               Text="点击「去授权」后在系统设置中打开 BetterGI 的开关。授权后可能需要重新打开 BetterGI 才会生效。" />
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" Text="屏幕录制（识别游戏画面）" />
+                        <Button Grid.Row="0" Grid.Column="1" Content="去授权" Command="{Binding RequestScreenRecordingCommand}" IsVisible="{Binding !ScreenRecordingGranted}" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="✅" IsVisible="{Binding ScreenRecordingGranted}" />
+
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="辅助功能（模拟键盘鼠标）" />
+                        <Button Grid.Row="1" Grid.Column="1" Content="去授权" Command="{Binding RequestAccessibilityCommand}" IsVisible="{Binding !AccessibilityGranted}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="✅" IsVisible="{Binding AccessibilityGranted}" />
+
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="输入监控（全局快捷键、键鼠录制）" />
+                        <Button Grid.Row="2" Grid.Column="1" Content="去授权" Command="{Binding RequestInputMonitoringCommand}" IsVisible="{Binding !InputMonitoringGranted}" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="✅" IsVisible="{Binding InputMonitoringGranted}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 第 2 步：启动 -->
+            <Border Classes="card">
+                <StackPanel Spacing="10">
+                    <TextBlock Classes="subtitle" Text="② 打开游戏后启动" />
+                    <TextBlock TextWrapping="Wrap" Text="{Binding WindowStatus}" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <c:TwoStateButton MinWidth="140" Height="40"
+                                          Classes="accent"
+                                          EnableContent="▶ 启动"
+                                          DisableContent="■ 停止"
+                                          IsChecked="{Binding Home.IsTriggerButtonChecked, Mode=OneWay}"
+                                          EnableCommand="{Binding Home.StartTriggerCommand}"
+                                          DisableCommand="{Binding Home.StopTriggerCommand}" />
+                        <Button Height="40" Content="📷 截图预览" Command="{Binding CapturePreviewCommand}" />
+                    </StackPanel>
+                    <TextBlock Classes="caption" TextWrapping="Wrap"
+                               Text="启动后即可使用左侧的「一条龙」（清日常、刷体力）、「地图追踪」（采集）、「调度器」等功能。实时触发（自动拾取、自动剧情等）也在启动后生效。" />
+                    <TextBlock Text="{Binding PreviewInfo}" IsVisible="{Binding PreviewInfo, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    <Image Source="{Binding Preview}" MaxHeight="360" HorizontalAlignment="Left" IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+            </Border>
+
+            <!-- 使用提示 -->
+            <Border Classes="card">
+                <StackPanel Spacing="4">
+                    <TextBlock Classes="subtitle" Text="GeForce NOW 使用建议" />
+                    <TextBlock TextWrapping="Wrap" Text="• 游戏内分辨率选 1920×1080（16:9），GeForce NOW 窗口尽量大一些或全屏。" />
+                    <TextBlock TextWrapping="Wrap" Text="• 不要让其他窗口遮挡游戏画面；执行任务时不要动鼠标键盘。" />
+                    <TextBlock TextWrapping="Wrap" Text="• 如果视角转动过快或过慢，调整下方「鼠标移动倍率」。" />
+                    <TextBlock TextWrapping="Wrap" Text="• 截图预览出现标题栏或黑边时，调整下方「顶部裁剪」。" />
+                </StackPanel>
+            </Border>
+
+            <!-- 高级设置 -->
+            <Expander Classes="card" Header="高级设置（窗口匹配、裁剪、键鼠）" HorizontalAlignment="Stretch">
+                <StackPanel Spacing="10" Margin="0,4,0,0">
+                    <Grid ColumnDefinitions="200,*" RowDefinitions="Auto,Auto" RowSpacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="窗口所属应用（逗号分隔）" />
+                        <TextBox Grid.Column="1" Text="{Binding OwnerKeywords}" Watermark="GeForce NOW, Safari, Google Chrome" />
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="窗口标题包含（可选）" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TitleKeywords}" Watermark="例如：Genshin" />
+                    </Grid>
+
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="绑定此窗口" Command="{Binding BindSelectedWindowCommand}" />
+                        <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="刷新" Command="{Binding RefreshWindowsCommand}" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Windows}" SelectedItem="{Binding SelectedWindow}" PlaceholderText="手动选择窗口（自动匹配失败时使用）" />
+                    </DockPanel>
+
+                    <Grid ColumnDefinitions="200,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="顶部裁剪（点，-1 为自动）" />
+                        <NumericUpDown Grid.Column="1" Width="160" HorizontalAlignment="Left" Minimum="-1" Maximum="200" Increment="1" Value="{Binding Config.TopInset}" />
+
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="自动裁剪为 16:9" />
+                        <ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding Config.AutoFit16By9}" />
+
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="鼠标移动倍率" />
+                        <NumericUpDown Grid.Row="2" Grid.Column="1" Width="160" HorizontalAlignment="Left" Minimum="0.1" Maximum="10" Increment="0.1" FormatString="0.00" Value="{Binding Config.MouseMoveMultiplier}" />
+
+                        <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="按键按住时长（毫秒）" />
+                        <NumericUpDown Grid.Row="3" Grid.Column="1" Width="160" HorizontalAlignment="Left" Minimum="10" Maximum="200" Increment="5" Value="{Binding Config.KeyPressHoldMs}" />
+
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="截图最高帧率" />
+                        <NumericUpDown Grid.Row="4" Grid.Column="1" Width="160" HorizontalAlignment="Left" Minimum="5" Maximum="60" Increment="5" Value="{Binding Config.CaptureMaxFps}" />
+                    </Grid>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
