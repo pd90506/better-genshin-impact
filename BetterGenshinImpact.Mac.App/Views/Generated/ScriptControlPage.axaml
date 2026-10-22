@@ -34,7 +34,7 @@
                         SelectionMode="Single">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Margin="8,4" Text="{Binding Name, Mode=OneWay}" />
+                            <TextBlock Margin="8,4" Text="{Binding Name, Mode=OneWay}" Foreground="{Binding NextFlag, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='True|Green|@unset'}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.ContextMenu>
@@ -79,7 +79,8 @@
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                 BorderThickness="1,1,1,1"
-                CornerRadius="8">
+                CornerRadius="8"
+                IsVisible="{Binding SelectedScriptGroup, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='@notnull|False|True'}">
             <Grid Margin="8,8,0,0">
                 <StackPanel>
                     <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T （实验功能）请在左侧栏选择或新增配置组}" />
@@ -104,7 +105,8 @@
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                 BorderThickness="1,1,1,1"
-                CornerRadius="8">
+                CornerRadius="8"
+                IsVisible="{Binding SelectedScriptGroup, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='@null|False|True'}">
             <Grid Margin="8,8,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -187,6 +189,7 @@
                                             Text="{Binding Name}"
                                             FontSize="14"
                                             ToolTip.Tip="{Binding FolderName}"
+                                            Foreground="{Binding NextFlag, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='True|Green|@unset'}"
                                             Grid.Column="1" />
                                     <TextBlock Text="{Binding TypeDesc}" VerticalAlignment="Center" Grid.Column="2" />
                                     <ToggleSwitch IsChecked="{Binding Status, Converter={StaticResource BooleanToEnableTextConverter}, Mode=TwoWay}" Grid.Column="3" />
@@ -201,10 +204,22 @@
                                 <MenuItem Command="{Binding AddShellCommand}" Header="{i18n:T 添加Shell}" />
                                 <MenuItem Command="{Binding AddNextFlagCommand}" Header="{i18n:T 下一次任务从此处执行}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" />
                                 <MenuItem Command="{Binding EditScriptCommonCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 修改通用配置}" />
-                                <MenuItem Command="{Binding EditJsScriptSettingsCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 修改JS脚本自定义配置}" />
-                                <MenuItem Command="{Binding OpenScriptFolderCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 打开所在目录}" />
+                                <MenuItem
+                                        Command="{Binding EditJsScriptSettingsCommand}"
+                                        CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}"
+                                        Header="{i18n:T 修改JS脚本自定义配置}"
+                                        IsVisible="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem.Type, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Javascript|True|False'}" />
+                                <MenuItem
+                                        Command="{Binding OpenScriptFolderCommand}"
+                                        CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}"
+                                        Header="{i18n:T 打开所在目录}"
+                                        IsVisible="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem.Type, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Shell|False|True'}" />
                                 <MenuItem Command="{Binding DeleteScriptCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 移除}" />
-                                <MenuItem Command="{Binding DeleteScriptByFolderCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 根据文件夹移除}" />
+                                <MenuItem
+                                        Command="{Binding DeleteScriptByFolderCommand}"
+                                        CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}"
+                                        Header="{i18n:T 根据文件夹移除}"
+                                        IsVisible="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem.Type, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Pathing|True|False'}" />
                             </ContextMenu>
                         </ListBox.ContextMenu>
                     </ListBox>

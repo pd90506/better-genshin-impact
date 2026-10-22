@@ -65,7 +65,9 @@
                                         Width="36"
                                         Padding="0"
                                         VerticalAlignment="Stretch"
-                                        Click="OnDeleteClick" />
+                                        Click="OnDeleteClick"
+                                        Content="🗑"
+                                        MinWidth="36" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

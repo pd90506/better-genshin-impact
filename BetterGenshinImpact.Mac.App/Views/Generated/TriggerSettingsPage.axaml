@@ -5,6 +5,7 @@
     xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
     xmlns:i="using:Avalonia.Xaml.Interactivity"
     xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:autoPick="using:BetterGenshinImpact.GameTask.AutoPick"
     xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
     x:Class="BetterGenshinImpact.MacApp.Views.Generated.TriggerSettingsPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
     <StackPanel Margin="{StaticResource PagePadding}">
@@ -106,6 +107,9 @@
                                 </StackPanel>
                             </Grid>
                         </RadioButton.Content>
+                        <i:Interaction.Behaviors>
+                            <c:CheckedCommandBehavior When="True" Command="{Binding AutoPickModeChangedCommand}" CommandParameter="{x:Static autoPick:AutoPickMode.Blacklist}" />
+                        </i:Interaction.Behaviors>
                     </RadioButton>
                     <RadioButton Margin="6,0,0,0" GroupName="AutoPickMode" IsChecked="{Binding IsWhitelistAutoPickMode, Mode=OneWay}">
                         <RadioButton.Content>
@@ -141,6 +145,9 @@
                                 </StackPanel>
                             </Grid>
                         </RadioButton.Content>
+                        <i:Interaction.Behaviors>
+                            <c:CheckedCommandBehavior When="True" Command="{Binding AutoPickModeChangedCommand}" CommandParameter="{x:Static autoPick:AutoPickMode.Whitelist}" />
+                        </i:Interaction.Behaviors>
                     </RadioButton>
                 </UniformGrid>
                 <StackPanel IsVisible="{Binding IsBlacklistAutoPickMode}">
@@ -410,7 +417,7 @@
                             Margin="0,0,8,0"
                             IsChecked="{Binding Config.AutoSkipConfig.CustomPriorityOptionsEnabled, Mode=TwoWay}" />
                 </Grid>
-                <Grid Margin="16" x:Name="CustomPriorityOptionsGrid">
+                <Grid Margin="16" x:Name="CustomPriorityOptionsGrid" IsVisible="{Binding Config.AutoSkipConfig.CustomPriorityOptionsEnabled, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='True|True|False'}">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />

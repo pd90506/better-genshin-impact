@@ -10,6 +10,11 @@
     xmlns:local="using:BetterGenshinImpact.View.Pages"
     xmlns:pages="using:BetterGenshinImpact.ViewModel.Pages"
     x:Class="BetterGenshinImpact.MacApp.Views.Generated.OneDragonFlowPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <i:Interaction.Behaviors>
+        <ia:EventTriggerBehavior EventName="Loaded">
+            <ia:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding}" />
+        </ia:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
     <Grid Margin="22,16,8,12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MaxWidth="300" />
@@ -19,9 +24,9 @@
             <DockPanel.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{Binding AddTaskGroupCommand}" Header="{i18n:T 新增配置}" />
-                    <MenuItem Command="{Binding DeleteTaskGroupCommand}" CommandParameter="{Binding #PageRoot.SelectedItem}" Header="{i18n:T 删除}" />
+                    <MenuItem Command="{Binding DeleteTaskGroupCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItem}" Header="{i18n:T 删除}" />
                     <Separator />
-                    <MenuItem Command="{Binding NextTaskGroupCommand}" CommandParameter="{Binding #PageRoot.SelectedItem}" Header="{i18n:T 从此执行}" />
+                    <MenuItem Command="{Binding NextTaskGroupCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItem}" Header="{i18n:T 从此执行}" />
                     <MenuItem Command="{Binding ClearNextTaskGroupCommand}" Header="{i18n:T 清除标记}" />
                 </ContextMenu>
             </DockPanel.ContextMenu>
@@ -44,13 +49,17 @@
                         Grid.Column="1"
                         Grid.Row="0"
                         Margin="0,0,10,0"
-                        Command="{Binding OneKeyExecuteCommand}" />
+                        Command="{Binding OneKeyExecuteCommand}"
+                        Content="▶"
+                        MinWidth="36" />
                 <Button
                         Grid.Column="2"
                         Grid.Row="0"
                         Margin="0,0,10,0"
                         x:Name="AddTaskGroupButton"
-                        Click="AddTaskGroupButton_Click" />
+                        Click="AddTaskGroupButton_Click"
+                        Content="＋"
+                        MinWidth="36" />
                 <Popup x:Name="AddConfigGroupPopup" Placement="Center" IsLightDismissEnabled="True">
                     <Border
                             CornerRadius="8"
@@ -97,7 +106,37 @@
                 </Grid.RowDefinitions>
                 <Separator Grid.Row="0" Margin="0,1.5,6,0" BorderThickness="0,1,0,0" />
             </Grid>
-            <ContentControl />
+            <ContentControl>
+                <ListBox ItemsSource="{Binding TaskList}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="card" Margin="0,2,14,2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse
+                                            Grid.Column="1"
+                                            Width="10"
+                                            Height="10"
+                                            Margin="10,0,10,0"
+                                            Fill="{Binding StatusColor}" />
+                                    <TextBlock
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Name}"
+                                            Width="100"
+                                            Foreground="{Binding IsNextTask, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='True|DodgerBlue|@unset'}" />
+                                    <ToggleSwitch Grid.Column="3" IsChecked="{Binding IsEnabled, Mode=TwoWay}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ContentControl>
         </DockPanel>
         <DockPanel Grid.Column="1" Margin="16,0,0,0">
             <StackPanel Margin="0,0,0,10" DockPanel.Dock="Top">
@@ -123,10 +162,31 @@
                             Margin="10,0,10,0"
                             DisplayMemberBinding="{Binding Name}"
                             ItemsSource="{Binding ConfigList}"
-                            SelectedItem="{Binding SelectedConfig, Mode=TwoWay}" />
-                    <Button Grid.Column="2" Margin="0,0,10,0" Command="{Binding AddConfigCommand}" />
-                    <Button Grid.Column="3" Margin="0,0,10,0" Command="{Binding RenameConfigCommand}" />
-                    <Button Grid.Column="4" Margin="0,0,10,0" Command="{Binding DeleteConfigCommand}" />
+                            SelectedItem="{Binding SelectedConfig, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                <ia:InvokeCommandAction Command="{Binding ConfigDropDownChangedCommand}" CommandParameter="GeniusInvocation" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
+                    <Button
+                            Grid.Column="2"
+                            Margin="0,0,10,0"
+                            Command="{Binding AddConfigCommand}"
+                            Content="＋"
+                            MinWidth="36" />
+                    <Button
+                            Grid.Column="3"
+                            Margin="0,0,10,0"
+                            Command="{Binding RenameConfigCommand}"
+                            Content="✎"
+                            MinWidth="36" />
+                    <Button
+                            Grid.Column="4"
+                            Margin="0,0,10,0"
+                            Command="{Binding DeleteConfigCommand}"
+                            Content="🗑"
+                            MinWidth="36" />
                 </Grid>
                 <Separator Margin="0,5,0,0" BorderThickness="0,1,0,0" />
             </StackPanel>
@@ -944,7 +1004,13 @@
                                         Width="200"
                                         Margin="0,0,36,0"
                                         ItemsSource="{Binding AutoFightViewModel.CombatStrategyListWithoutCombo}"
-                                        SelectedItem="{Binding SelectedConfig.AutoBossStrategyName, Mode=TwoWay}" />
+                                        SelectedItem="{Binding SelectedConfig.AutoBossStrategyName, Mode=TwoWay}">
+                                    <i:Interaction.Behaviors>
+                                        <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                            <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                                        </ia:EventTriggerBehavior>
+                                    </i:Interaction.Behaviors>
+                                </ComboBox>
                             </Grid>
                             <Grid Margin="16">
                                 <Grid.RowDefinitions>

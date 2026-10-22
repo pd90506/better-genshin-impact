@@ -47,6 +47,7 @@ public partial class MacApplication : Avalonia.Application
                 mainWindow.Clipboard?.GetTextAsync().GetAwaiter().GetResult());
 
             desktop.ShutdownRequested += (_, _) => OnShutdown();
+            mainWindow.Opened += (_, _) => CommandLineActivation.Handle();
             _ = Task.Run(() => _host.StartAsync());
         }
 

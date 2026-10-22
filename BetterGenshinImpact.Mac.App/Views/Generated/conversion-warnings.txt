@@ -1,2 +1,4 @@
 MapPathingPage: 删除引用非 CLR 命名空间的 x:Static（Converter）
+NotificationSettingsPage: 无法转换 DataTrigger（Command），使用默认值
+NotificationSettingsPage: 无法转换 DataTrigger（Content），使用默认值
 OneDragonFlowPage: 删除代码隐藏事件 ContextMenuOpening=DockPanel_ContextMenuOpening

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using BetterGenshinImpact.Core.Script.Group;
 using BetterGenshinImpact.ViewModel.Pages;
@@ -33,6 +34,15 @@ public partial class OneDragonFlowPage
             { ExpBottleBigCheckBox, "祝圣精华" },
             { ExpBottleSmallCheckBox, "祝圣油膏" },
         };
+
+        // 右键菜单不在列表的可视树中，菜单项的参数直接使用当前选中的任务（Avalonia 右键会选中列表项）
+        foreach (var menu in this.GetLogicalDescendants().OfType<Control>().Select(c => c.ContextMenu).Where(m => m != null))
+        {
+            foreach (var item in menu!.Items.OfType<MenuItem>())
+            {
+                item.Bind(MenuItem.CommandParameterProperty, new Avalonia.Data.Binding(nameof(OneDragonFlowViewModel.SelectedTask)));
+            }
+        }
 
         OneDragonFlowViewModel? subscribed = null;
         DataContextChanged += (_, _) =>

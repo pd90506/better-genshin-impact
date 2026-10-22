@@ -278,18 +278,32 @@ public class DrawerHost : Grid
         set => SetValue(DrawerWidthProperty, value);
     }
 
+    private View.Controls.Drawer.DrawerViewModel? DrawerVm =>
+        DataContext?.GetType().GetProperty("DrawerVm")?.GetValue(DataContext) as View.Controls.Drawer.DrawerViewModel;
+
     private void UpdateState()
     {
+        var vm = DrawerVm;
+        if (!IsOpen && IsVisible && vm?.OnDrawerClosingCommand is { } closing)
+        {
+            // 原版在抽屉关闭前执行 OnDrawerClosingCommand，可以取消关闭
+            var args = new System.ComponentModel.CancelEventArgs();
+            closing.Execute(args);
+            if (args.Cancel)
+            {
+                IsOpen = true;
+                return;
+            }
+        }
+
+        var wasOpen = IsVisible;
         IsVisible = IsOpen;
         IsHitTestVisible = IsOpen;
-        if (IsOpen && DataContext is { } dc)
+        if (IsOpen && !wasOpen && vm != null)
         {
             // 原版在抽屉打开后执行 OnDrawerOpenedCommand
-            if (dc.GetType().GetProperty("DrawerVm")?.GetValue(dc) is View.Controls.Drawer.DrawerViewModel vm)
-            {
-                _panel.Width = vm.DrawerWidth;
-                vm.OnDrawerOpenedCommand?.Execute(null);
-            }
+            _panel.Width = vm.DrawerWidth;
+            vm.OnDrawerOpenedCommand?.Execute(null);
         }
     }
 
@@ -340,5 +354,153 @@ public class CodeTextBox : TextBox
     {
         get => GetValue(CodeProperty);
         set => SetValue(CodeProperty, value);
+    }
+}
+
+/// <summary>
+/// 右键按下时执行命令（对应原版 EventTrigger PreviewMouseRightButtonDown）
+/// </summary>
+public class RightPressCommandBehavior : Avalonia.Xaml.Interactivity.Behavior<Control>
+{
+    public static readonly StyledProperty<System.Windows.Input.ICommand?> CommandProperty =
+        AvaloniaProperty.Register<RightPressCommandBehavior, System.Windows.Input.ICommand?>(nameof(Command));
+
+    public static readonly StyledProperty<object?> CommandParameterProperty =
+        AvaloniaProperty.Register<RightPressCommandBehavior, object?>(nameof(CommandParameter));
+
+    public System.Windows.Input.ICommand? Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+
+    public object? CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
+
+    protected override void OnAttached()
+    {
+        base.OnAttached();
+        AssociatedObject?.AddHandler(InputElement.PointerPressedEvent, OnPressed, RoutingStrategies.Tunnel);
+    }
+
+    protected override void OnDetaching()
+    {
+        AssociatedObject?.RemoveHandler(InputElement.PointerPressedEvent, OnPressed);
+        base.OnDetaching();
+    }
+
+    private void OnPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.GetCurrentPoint(AssociatedObject).Properties.IsRightButtonPressed && Command?.CanExecute(CommandParameter) == true)
+        {
+            Command.Execute(CommandParameter);
+        }
+    }
+}
+
+/// <summary>
+/// 右键菜单关闭时执行命令（对应原版 EventTrigger ContextMenuClosing）
+/// </summary>
+public class ContextMenuClosedCommandBehavior : Avalonia.Xaml.Interactivity.Behavior<Control>
+{
+    public static readonly StyledProperty<System.Windows.Input.ICommand?> CommandProperty =
+        AvaloniaProperty.Register<ContextMenuClosedCommandBehavior, System.Windows.Input.ICommand?>(nameof(Command));
+
+    public static readonly StyledProperty<object?> CommandParameterProperty =
+        AvaloniaProperty.Register<ContextMenuClosedCommandBehavior, object?>(nameof(CommandParameter));
+
+    private ContextMenu? _menu;
+
+    public System.Windows.Input.ICommand? Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+
+    public object? CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
+
+    protected override void OnAttached()
+    {
+        base.OnAttached();
+        _menu = AssociatedObject?.ContextMenu;
+        if (_menu != null)
+        {
+            _menu.Closed += OnClosed;
+        }
+    }
+
+    protected override void OnDetaching()
+    {
+        if (_menu != null)
+        {
+            _menu.Closed -= OnClosed;
+        }
+
+        base.OnDetaching();
+    }
+
+    private void OnClosed(object? sender, RoutedEventArgs e)
+    {
+        if (Command?.CanExecute(CommandParameter) == true)
+        {
+            Command.Execute(CommandParameter);
+        }
+    }
+}
+
+/// <summary>
+/// 勾选状态变化时执行命令（对应原版 EventTrigger Checked / Unchecked）。
+/// 与 WPF 一样响应子元素冒泡上来的事件，所以可以放在包含开关的面板上
+/// </summary>
+public class CheckedCommandBehavior : Avalonia.Xaml.Interactivity.Behavior<Control>
+{
+    public static readonly StyledProperty<System.Windows.Input.ICommand?> CommandProperty =
+        AvaloniaProperty.Register<CheckedCommandBehavior, System.Windows.Input.ICommand?>(nameof(Command));
+
+    public static readonly StyledProperty<object?> CommandParameterProperty =
+        AvaloniaProperty.Register<CheckedCommandBehavior, object?>(nameof(CommandParameter));
+
+    /// <summary>
+    /// True：勾选时执行；False：取消勾选时执行
+    /// </summary>
+    public bool When { get; set; } = true;
+
+    public System.Windows.Input.ICommand? Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+
+    public object? CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
+
+    protected override void OnAttached()
+    {
+        base.OnAttached();
+        AssociatedObject?.AddHandler(ToggleButton.IsCheckedChangedEvent, OnChanged, RoutingStrategies.Bubble);
+    }
+
+    protected override void OnDetaching()
+    {
+        AssociatedObject?.RemoveHandler(ToggleButton.IsCheckedChangedEvent, OnChanged);
+        base.OnDetaching();
+    }
+
+    private void OnChanged(object? sender, RoutedEventArgs e)
+    {
+        if (e.Source is ToggleButton toggle && toggle.IsChecked == When && Command?.CanExecute(CommandParameter) == true)
+        {
+            Command.Execute(CommandParameter);
+        }
     }
 }

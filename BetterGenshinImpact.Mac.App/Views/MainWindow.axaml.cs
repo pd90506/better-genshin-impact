@@ -28,13 +28,14 @@ public partial class MainWindow : Window
 {
     private const int MaxLogChars = 60_000;
     private readonly List<NavItem> _items;
+    private NavItem? _current;
     private readonly StringBuilder _log = new();
     private bool _logDirty;
 
     public MainWindow()
     {
         InitializeComponent();
-        VersionText.Text = "macOS · " + Global.Version;
+        VersionText.Text = "macOS · " + Global.Version.Split('+')[0];
 
         _items =
         [
@@ -84,6 +85,40 @@ public partial class MainWindow : Window
             FlushLog();
             return true;
         }, TimeSpan.FromMilliseconds(200));
+
+        var smokeDir = Environment.GetEnvironmentVariable("BGI_SMOKE_DIR");
+        if (!string.IsNullOrEmpty(smokeDir))
+        {
+            Opened += (_, _) => _ = RunSmokeTestAsync(smokeDir);
+        }
+    }
+
+    /// <summary>
+    /// 界面冒烟测试：依次打开每个页面并截图，用于在没有 Mac 的环境中检查页面能否正常加载
+    /// </summary>
+    private async System.Threading.Tasks.Task RunSmokeTestAsync(string dir)
+    {
+        System.IO.Directory.CreateDirectory(dir);
+        await System.Threading.Tasks.Task.Delay(1500);
+        for (var i = 0; i < _items.Count; i++)
+        {
+            NavList.SelectedIndex = i;
+            await System.Threading.Tasks.Task.Delay(1200);
+            var failed = PageHost.Content is TextBlock tb && tb.Text?.StartsWith("页面加载失败") == true;
+            Console.WriteLine($"[smoke] {i:00} {_items[i].Title}: {(failed ? "FAILED" : "ok")}");
+            if (failed)
+            {
+                Console.WriteLine(((TextBlock)PageHost.Content!).Text);
+            }
+
+            var size = new PixelSize((int)Bounds.Width, (int)Bounds.Height);
+            using var bitmap = new Avalonia.Media.Imaging.RenderTargetBitmap(size);
+            bitmap.Render(this);
+            bitmap.Save(System.IO.Path.Combine(dir, $"{i:00}.png"));
+        }
+
+        Console.WriteLine("[smoke] done");
+        Close();
     }
 
     private static Control Page<TPage, TViewModel>(bool scroll = true) where TPage : Control, new() where TViewModel : class
@@ -102,6 +137,8 @@ public partial class MainWindow : Window
         try
         {
             item.Page ??= item.Create();
+            NotifyNavigation(_current, item);
+            _current = item;
             PageHost.Content = item.Page;
         }
         catch (Exception e)
@@ -114,6 +151,29 @@ public partial class MainWindow : Window
             };
         }
     }
+
+    /// <summary>
+    /// 原版 WPF-UI 导航时调用 ViewModel 的 OnNavigatedTo / OnNavigatedFrom（很多页面在这里加载数据）
+    /// </summary>
+    private static void NotifyNavigation(NavItem? from, NavItem to)
+    {
+        if (from != null && from != to && ViewModelOf(from) is Wpf.Ui.Abstractions.Controls.INavigationAware fromVm)
+        {
+            _ = fromVm.OnNavigatedFromAsync();
+        }
+
+        if (from != to && ViewModelOf(to) is Wpf.Ui.Abstractions.Controls.INavigationAware toVm)
+        {
+            _ = toVm.OnNavigatedToAsync();
+        }
+    }
+
+    private static object? ViewModelOf(NavItem item) => item.Page switch
+    {
+        ScrollViewer { Content: Control page } => page.DataContext,
+        Control page => page.DataContext,
+        _ => null,
+    };
 
     /// <summary>
     /// 原版 ViewModel 中的 _navigationService.Navigate(typeof(XxxPage))

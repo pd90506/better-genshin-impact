@@ -80,6 +80,13 @@
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+                    <i:Interaction.Behaviors>
+                        <c:RightPressCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="True" />
+                        <c:ContextMenuClosedCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="False" />
+                        <ia:EventTriggerBehavior EventName="SelectionChanged">
+                            <ia:InvokeCommandAction Command="{Binding OpenScriptDetailDrawerCommand}" CommandParameter="{Binding SelectedItem, ElementName=ScriptsListView}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="{Binding OpenScriptProjectFolderCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 打开目录}" />

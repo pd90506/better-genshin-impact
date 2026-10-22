@@ -95,7 +95,13 @@
                             Width="180"
                             Margin="0,0,36,0"
                             ItemsSource="{Binding AutoFightViewModel.StrategyList}"
-                            SelectedItem="{Binding Config.AutoGeniusInvokationConfig.StrategyName, Mode=TwoWay}" />
+                            SelectedItem="{Binding Config.AutoGeniusInvokationConfig.StrategyName, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="GeniusInvocation" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -397,7 +403,13 @@
                             Width="180"
                             Margin="0,0,36,0"
                             ItemsSource="{Binding AutoFightViewModel.CombatStrategyList}"
-                            SelectedItem="{Binding Config.AutoFightConfig.StrategyName, Mode=TwoWay}" />
+                            SelectedItem="{Binding Config.AutoFightConfig.StrategyName, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -938,7 +950,8 @@
                                 Grid.RowSpan="2"
                                 Grid.Column="3"
                                 Margin="0,0,5,0"
-                                IsChecked="{Binding Config.AutoFightConfig.GuardianCombatSkip, Mode=TwoWay}" />
+                                IsChecked="{Binding Config.AutoFightConfig.GuardianCombatSkip, Mode=TwoWay}"
+                                IsVisible="{Binding Config.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
                         <TextBlock
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
@@ -954,7 +967,8 @@
                                 Grid.RowSpan="2"
                                 Grid.Column="4"
                                 Margin="0,0,5,0"
-                                IsChecked="{Binding Config.AutoFightConfig.BurstEnabled, Mode=TwoWay}" />
+                                IsChecked="{Binding Config.AutoFightConfig.BurstEnabled, Mode=TwoWay}"
+                                IsVisible="{Binding Config.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
                         <TextBlock
                                 Grid.Row="2"
                                 Grid.Column="0"
@@ -969,7 +983,8 @@
                                 Grid.Column="4"
                                 Margin="0,10,36,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding Config.AutoFightConfig.GuardianAvatarHold, Mode=TwoWay}" />
+                                IsChecked="{Binding Config.AutoFightConfig.GuardianAvatarHold, Mode=TwoWay}"
+                                IsVisible="{Binding Config.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
                     </Grid>
                 </Expander>
                 <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
@@ -1207,7 +1222,13 @@
                             Width="180"
                             Margin="0,0,36,0"
                             ItemsSource="{Binding AutoFightViewModel.CombatStrategyList}"
-                            SelectedItem="{Binding Config.AutoFightConfig.StrategyName, Mode=TwoWay}" />
+                            SelectedItem="{Binding Config.AutoFightConfig.StrategyName, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -1654,7 +1675,13 @@
                             Width="200"
                             Margin="0,0,36,0"
                             ItemsSource="{Binding AutoFightViewModel.CombatStrategyListWithoutCombo}"
-                            SelectedItem="{Binding Config.AutoBossConfig.StrategyName, Mode=TwoWay}" />
+                            SelectedItem="{Binding Config.AutoBossConfig.StrategyName, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -1972,7 +1999,13 @@
                             Width="180"
                             Margin="0,0,36,0"
                             ItemsSource="{Binding AutoFightViewModel.CombatStrategyListWithoutCombo}"
-                            SelectedItem="{Binding Config.AutoStygianOnslaughtConfig.StrategyName, Mode=TwoWay}" />
+                            SelectedItem="{Binding Config.AutoStygianOnslaughtConfig.StrategyName, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -2473,7 +2506,13 @@
                             Width="180"
                             Margin="0,0,36,0"
                             ItemsSource="{Binding AutoFightViewModel.CombatStrategyListWithoutCombo}"
-                            SelectedItem="{Binding Config.AutoLeyLineOutcropConfig.FightConfig.StrategyName, Mode=TwoWay}" />
+                            SelectedItem="{Binding Config.AutoLeyLineOutcropConfig.FightConfig.StrategyName, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>

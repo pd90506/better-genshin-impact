@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Avalonia;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
@@ -207,4 +208,53 @@ public sealed class WpfBrushConverter : IValueConverter
     };
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => BindingOperations.DoNothing;
+}
+
+/// <summary>
+/// 原版 Style.DataTrigger 的替代：参数为「匹配值1;匹配值2|匹配时的值|不匹配时的值」，
+/// 匹配值可以是 @null、@notnull 或与 ToString() 比较的文本；结果值 @unset 表示使用控件默认值
+/// </summary>
+public sealed class TriggerConverter : IValueConverter
+{
+    public static readonly TriggerConverter Instance = new();
+
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var parts = (parameter as string ?? string.Empty).Split('|');
+        if (parts.Length < 3)
+        {
+            return AvaloniaProperty.UnsetValue;
+        }
+
+        var text = value?.ToString() ?? string.Empty;
+        var matched = parts[0].Split(';').Any(m => m switch
+        {
+            "@null" => value == null,
+            "@notnull" => value != null,
+            _ => string.Equals(text, m, StringComparison.OrdinalIgnoreCase),
+        });
+        return Parse(matched ? parts[1] : parts[2], targetType);
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
+
+    private static object? Parse(string raw, Type targetType)
+    {
+        if (raw == "@unset")
+        {
+            return AvaloniaProperty.UnsetValue;
+        }
+
+        if (targetType == typeof(bool) || targetType == typeof(bool?))
+        {
+            return bool.TryParse(raw, out var b) && b;
+        }
+
+        if (typeof(Avalonia.Media.IBrush).IsAssignableFrom(targetType))
+        {
+            return Avalonia.Media.Brush.Parse(raw);
+        }
+
+        return raw;
+    }
 }

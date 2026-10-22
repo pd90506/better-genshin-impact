@@ -68,6 +68,20 @@ public static class FeatureWindows
                 Dispatcher.UIThread.Post(host.Close);
             }
         };
+        // 原版窗口 Closing 事件绑定的 ClosingCommand（例如保存设置）
+        host.Closing += (_, e) =>
+        {
+            if (content.DataContext?.GetType().GetProperty("ClosingCommand")?.GetValue(content.DataContext) is System.Windows.Input.ICommand command)
+            {
+                var args = new System.ComponentModel.CancelEventArgs();
+                if (command.CanExecute(args))
+                {
+                    command.Execute(args);
+                }
+
+                e.Cancel = args.Cancel;
+            }
+        };
         host.Closed += (_, _) =>
         {
             if (!closing)
@@ -118,6 +132,8 @@ public static class FeatureWindows
                 return (new Gen.JsonMonoDialog { DataContext = new JsonMonoViewModel(j.Path) }, 900, 640);
             case WV.SkillCdConfigWindow s:
                 return (new Gen.SkillCdConfigWindow { DataContext = s }, 560, 520);
+            case View.Pages.View.PathingConfigView p:
+                return (new Gen.PathingConfigView { DataContext = p.DataContext }, 560, 720);
             case WV.MusicSettingsWindow m:
                 return (new Gen.MusicSettingsWindow { DataContext = m.DataContext }, 720, 640);
             case WV.AboutWindow:

@@ -46,7 +46,13 @@
                             DisplayMemberBinding="{Binding Value}"
                             ItemsSource="{Binding LanguageDict}"
                             SelectedItem="{Binding Config.OtherConfig.UiCultureInfoName, Converter={StaticResource CultureInfoNameToKVPConverter}, Mode=TwoWay}"
-                            SelectedValueBinding="{Binding Key}" />
+                            SelectedValueBinding="{Binding Key}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                <ia:InvokeCommandAction Command="{Binding UiLanguageSelectionChangedCommand}" CommandParameter="{Binding $parent[ComboBox].SelectedItem}" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
             </c:CardControl.Header>
         </c:CardControl>
@@ -81,7 +87,13 @@
                             DisplayMemberBinding="{Binding Value}"
                             ItemsSource="{Binding LanguageDict}"
                             SelectedItem="{Binding Config.OtherConfig.GameCultureInfoName, Converter={StaticResource CultureInfoNameToKVPConverter}, Mode=TwoWay}"
-                            SelectedValueBinding="{Binding Key}" />
+                            SelectedValueBinding="{Binding Key}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                <ia:InvokeCommandAction Command="{Binding GameLangSelectionChangedCommand}" CommandParameter="{Binding $parent[ComboBox].SelectedItem}" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </ComboBox>
                 </Grid>
             </c:CardControl.Header>
         </c:CardControl>
@@ -272,6 +284,10 @@
                             Grid.Column="1"
                             Margin="0,0,24,0"
                             IsChecked="{Binding Config.MaskWindowConfig.MaskEnabled, Mode=TwoWay}" />
+                    <i:Interaction.Behaviors>
+                        <c:CheckedCommandBehavior When="False" Command="{Binding SwitchMaskEnabledCommand}" />
+                        <c:CheckedCommandBehavior When="True" Command="{Binding SwitchMaskEnabledCommand}" />
+                    </i:Interaction.Behaviors>
                 </Grid>
             </Expander.Header>
             <StackPanel>
@@ -301,7 +317,12 @@
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             Margin="0,0,12,0"
-                            IsChecked="{Binding Config.MaskWindowConfig.OverlayLayoutEditEnabled, Mode=TwoWay}" />
+                            IsChecked="{Binding Config.MaskWindowConfig.OverlayLayoutEditEnabled, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <c:CheckedCommandBehavior When="False" Command="{Binding RefreshMaskSettingsCommand}" />
+                            <c:CheckedCommandBehavior When="True" Command="{Binding RefreshMaskSettingsCommand}" />
+                        </i:Interaction.Behaviors>
+                    </ToggleSwitch>
                     <Button
                             Grid.Row="0"
                             Grid.RowSpan="2"
@@ -646,7 +667,7 @@
                             </ComboBox>
                             <Rectangle Grid.Column="2" Width="36" />
                         </Grid>
-                        <Grid Margin="16,0,16,16">
+                        <Grid Margin="16,0,16,16" IsVisible="{Binding Config.MaskWindowConfig.CrosshairType, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Crosshair;Diagonal;Dot;DotCrosshair|True|False'}">
                             <Border Padding="12,8" CornerRadius="4" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
                                 <StackPanel>
                                     <Grid Margin="0,4">
@@ -711,7 +732,7 @@
                                                 Increment="1"
                                                 Value="{Binding Config.MaskWindowConfig.CrosshairSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </Grid>
-                                    <Grid Margin="0,4">
+                                    <Grid Margin="0,4" IsVisible="{Binding Config.MaskWindowConfig.CrosshairType, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='DotCrosshair|True|False'}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="*" />
@@ -736,7 +757,7 @@
                                 </StackPanel>
                             </Border>
                         </Grid>
-                        <Grid Margin="16,0,16,16">
+                        <Grid Margin="16,0,16,16" IsVisible="{Binding Config.MaskWindowConfig.CrosshairType, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='Custom|True|False'}">
                             <Border Padding="12,8" CornerRadius="4" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
                                 <StackPanel>
                                     <Grid Margin="0,4">
@@ -812,7 +833,12 @@
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             Margin="0,0,36,0"
-                            IsChecked="{Binding Config.MaskWindowConfig.UidCoverEnabled, Mode=TwoWay}" />
+                            IsChecked="{Binding Config.MaskWindowConfig.UidCoverEnabled, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <c:CheckedCommandBehavior When="False" Command="{Binding RefreshMaskSettingsCommand}" />
+                            <c:CheckedCommandBehavior When="True" Command="{Binding RefreshMaskSettingsCommand}" />
+                        </i:Interaction.Behaviors>
+                    </ToggleSwitch>
                 </Grid>
             </StackPanel>
         </Expander>
@@ -902,7 +928,12 @@
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             Margin="0,0,24,0"
-                            IsChecked="{Binding Config.CommonConfig.ScreenshotEnabled, Mode=TwoWay}" />
+                            IsChecked="{Binding Config.CommonConfig.ScreenshotEnabled, Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <c:CheckedCommandBehavior When="False" Command="{Binding SwitchTakenScreenshotEnabledCommand}" />
+                            <c:CheckedCommandBehavior When="True" Command="{Binding SwitchTakenScreenshotEnabledCommand}" />
+                        </i:Interaction.Behaviors>
+                    </ToggleSwitch>
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -1630,6 +1661,10 @@
                                     Grid.Column="1"
                                     Margin="0,0,24,0"
                                     IsChecked="{Binding Config.OtherConfig.AutoRestartConfig.Enabled, Mode=TwoWay}" />
+                            <i:Interaction.Behaviors>
+                                <c:CheckedCommandBehavior When="False" Command="{Binding SwitchMaskEnabledCommand}" />
+                                <c:CheckedCommandBehavior When="True" Command="{Binding SwitchMaskEnabledCommand}" />
+                            </i:Interaction.Behaviors>
                         </Grid>
                     </Expander.Header>
                     <StackPanel>
@@ -1772,6 +1807,10 @@
                                     Grid.Column="1"
                                     Margin="0,0,24,0"
                                     IsChecked="{Binding Config.OtherConfig.FarmingPlanConfig.Enabled, Mode=TwoWay}" />
+                            <i:Interaction.Behaviors>
+                                <c:CheckedCommandBehavior When="False" Command="{Binding SwitchMaskEnabledCommand}" />
+                                <c:CheckedCommandBehavior When="True" Command="{Binding SwitchMaskEnabledCommand}" />
+                            </i:Interaction.Behaviors>
                         </Grid>
                     </Expander.Header>
                     <StackPanel>
@@ -1860,6 +1899,10 @@
                                                 Grid.Column="1"
                                                 Margin="0,0,24,0"
                                                 IsChecked="{Binding Config.OtherConfig.FarmingPlanConfig.MiyousheDataConfig.Enabled, Mode=TwoWay}" />
+                                        <i:Interaction.Behaviors>
+                                            <c:CheckedCommandBehavior When="False" Command="{Binding SwitchMaskEnabledCommand}" />
+                                            <c:CheckedCommandBehavior When="True" Command="{Binding SwitchMaskEnabledCommand}" />
+                                        </i:Interaction.Behaviors>
                                     </Grid>
                                 </Expander.Header>
                                 <StackPanel>
@@ -1946,6 +1989,10 @@
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Text="{i18n:T 用于配置米游社相关的信息如cookie}"
                                     TextWrapping="Wrap" />
+                            <i:Interaction.Behaviors>
+                                <c:CheckedCommandBehavior When="False" Command="{Binding SwitchMaskEnabledCommand}" />
+                                <c:CheckedCommandBehavior When="True" Command="{Binding SwitchMaskEnabledCommand}" />
+                            </i:Interaction.Behaviors>
                         </Grid>
                     </Expander.Header>
                     <StackPanel>
@@ -2021,6 +2068,10 @@
                                     Grid.Column="1"
                                     Margin="0,0,24,0"
                                     IsChecked="{Binding Config.OtherConfig.MiyousheConfig.LogSyncCookie, Mode=TwoWay}" />
+                            <i:Interaction.Behaviors>
+                                <c:CheckedCommandBehavior When="False" Command="{Binding SwitchMaskEnabledCommand}" />
+                                <c:CheckedCommandBehavior When="True" Command="{Binding SwitchMaskEnabledCommand}" />
+                            </i:Interaction.Behaviors>
                         </Grid>
                     </StackPanel>
                 </Expander>
@@ -2076,7 +2127,13 @@
                                     MinWidth="90"
                                     Margin="0,0,36,0"
                                     ItemsSource="{Binding PaddleOcrModelConfigs}"
-                                    SelectedItem="{Binding SelectedPaddleOcrModelConfig, Mode=TwoWay}" />
+                                    SelectedItem="{Binding SelectedPaddleOcrModelConfig, Mode=TwoWay}">
+                                <i:Interaction.Behaviors>
+                                    <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                        <ia:InvokeCommandAction Command="{Binding PaddleOcrModelConfigChangedCommand}" CommandParameter="{Binding $parent[ComboBox].SelectedItem}" />
+                                    </ia:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                            </ComboBox>
                         </Grid>
                     </StackPanel>
                 </Expander>

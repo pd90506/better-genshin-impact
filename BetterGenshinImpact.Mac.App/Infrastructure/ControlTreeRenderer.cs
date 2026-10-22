@@ -35,6 +35,9 @@ public static class ControlTreeRenderer
                 return new Panel();
             case Control avaloniaControl:
                 return avaloniaControl;
+            case View.Pages.View.ScriptGroupConfigView view:
+                // 调度器配置组设置：由原版 XAML 转换生成的界面
+                return new Views.Generated.ScriptGroupConfigView { DataContext = view.DataContext };
             case string text:
                 return new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap };
             case WC.StackPanel sp:

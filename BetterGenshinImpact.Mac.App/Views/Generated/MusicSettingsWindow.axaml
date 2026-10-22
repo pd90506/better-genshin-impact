@@ -133,7 +133,13 @@
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition />
                                                 </Grid.ColumnDefinitions>
-                                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsEnabled, Mode=TwoWay}" />
+                                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsEnabled, Mode=TwoWay}">
+                                                    <i:Interaction.Behaviors>
+                                                        <ia:EventTriggerBehavior EventName="Click">
+                                                            <ia:InvokeCommandAction Command="{Binding #PageRoot.DataContext.UpdateTrackSelectionCommand}" />
+                                                        </ia:EventTriggerBehavior>
+                                                    </i:Interaction.Behaviors>
+                                                </CheckBox>
                                                 <TextBlock
                                                         Grid.Column="1"
                                                         Margin="8,0"

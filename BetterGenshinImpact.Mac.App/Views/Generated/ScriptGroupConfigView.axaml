@@ -1191,7 +1191,11 @@
                                     Grid.RowSpan="2"
                                     Grid.Column="1"
                                     Margin="0,0,24,0"
-                                    IsChecked="{Binding PathingConfig.AutoFightEnabled, Mode=TwoWay}" />
+                                    IsChecked="{Binding PathingConfig.AutoFightEnabled, Mode=TwoWay}">
+                                <i:Interaction.Behaviors>
+                                    <c:CheckedCommandBehavior When="True" Command="{Binding AutoFightEnabledCheckedCommand}" />
+                                </i:Interaction.Behaviors>
+                            </ToggleSwitch>
                         </Grid>
                     </Expander.Header>
                     <StackPanel>
@@ -1238,7 +1242,13 @@
                                     Width="180"
                                     Margin="0,0,36,0"
                                     ItemsSource="{Binding AutoFightViewModel.CombatStrategyList}"
-                                    SelectedItem="{Binding PathingConfig.AutoFightConfig.StrategyName, Mode=TwoWay}" />
+                                    SelectedItem="{Binding PathingConfig.AutoFightConfig.StrategyName, Mode=TwoWay}">
+                                <i:Interaction.Behaviors>
+                                    <ia:EventTriggerBehavior EventName="DropDownOpened">
+                                        <ia:InvokeCommandAction Command="{Binding StrategyDropDownOpenedCommand}" CommandParameter="Combat" />
+                                    </ia:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                            </ComboBox>
                         </Grid>
                         <Grid Margin="16">
                             <Grid.RowDefinitions>
@@ -1778,7 +1788,8 @@
                                             Grid.RowSpan="2"
                                             Grid.Column="3"
                                             Margin="0,0,5,0"
-                                            IsChecked="{Binding PathingConfig.AutoFightConfig.GuardianCombatSkip, Mode=TwoWay}" />
+                                            IsChecked="{Binding PathingConfig.AutoFightConfig.GuardianCombatSkip, Mode=TwoWay}"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
                                     <TextBlock
                                             Grid.Row="0"
                                             Grid.RowSpan="2"
@@ -1794,7 +1805,8 @@
                                             Grid.RowSpan="2"
                                             Grid.Column="4"
                                             Margin="0,0,5,0"
-                                            IsChecked="{Binding PathingConfig.AutoFightConfig.BurstEnabled, Mode=TwoWay}" />
+                                            IsChecked="{Binding PathingConfig.AutoFightConfig.BurstEnabled, Mode=TwoWay}"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
                                     <TextBlock
                                             Grid.Row="2"
                                             Grid.Column="0"
@@ -1809,7 +1821,8 @@
                                             Grid.Column="4"
                                             Margin="0,10,36,0"
                                             VerticalAlignment="Center"
-                                            IsChecked="{Binding PathingConfig.AutoFightConfig.GuardianAvatarHold, Mode=TwoWay}" />
+                                            IsChecked="{Binding PathingConfig.AutoFightConfig.GuardianAvatarHold, Mode=TwoWay}"
+                                            IsVisible="{Binding PathingConfig.AutoFightConfig.GuardianAvatar, Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='|False|True'}" />
                                 </Grid>
                             </Expander>
                         </Grid>

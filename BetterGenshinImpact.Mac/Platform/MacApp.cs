@@ -66,6 +66,12 @@ public partial class App : System.Windows.Application
                 return _host;
             }
 
+            // WPF 会注册 pack:// 协议，原版代码中有大量 pack://application:,,,/ 资源地址
+            if (!UriParser.IsKnownScheme("pack"))
+            {
+                UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
+            }
+
             MacAppEnvironment.Prepare();
             MacEventTap.Install();
             InstanceBootstrap.Initialize();
@@ -133,6 +139,8 @@ public partial class App : System.Windows.Application
         services.AddSingleton(i18nService);
 
         services.AddSingleton(InstanceBootstrap.Current);
+        services.AddSingleton<InstanceService>();
+        services.AddHostedService(sp => sp.GetRequiredService<InstanceService>());
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<ISnackbarService, SnackbarService>();
         services.AddSingleton<IUpdateService, UpdateService>();
@@ -181,6 +189,9 @@ public partial class App : System.Windows.Application
         services.AddSingleton<Win32RuntimeProvider>();
         services.AddSingleton<IGameRuntimeProvider>(sp => sp.GetRequiredService<Win32RuntimeProvider>());
         services.AddSingleton<GameRuntimeService>();
+        // 首页依赖（云原神网页版实例在 macOS 版不可用，仅用于满足依赖）
+        services.AddSingleton<WebViewInstanceStore>();
+        services.AddSingleton<WebViewInstanceLauncher>();
 
         services.AddSingleton<RecognitionTemplateAssetService>();
         services.AddSingleton<RecognitionTemplateEditorService>();

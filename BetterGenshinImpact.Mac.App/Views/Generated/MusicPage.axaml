@@ -7,6 +7,11 @@
     xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
     xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
     x:Class="BetterGenshinImpact.MacApp.Views.Generated.MusicPage" x:Name="PageRoot" FontFamily="{StaticResource TextThemeFontFamily}" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <i:Interaction.Behaviors>
+        <ia:EventTriggerBehavior EventName="Loaded">
+            <ia:InvokeCommandAction Command="{Binding InitializeCommand}" />
+        </ia:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -50,7 +55,9 @@
                                 Height="34"
                                 Margin="0,0,7,0"
                                 Command="{Binding OpenFolderCommand}"
-                                ToolTip.Tip="{i18n:T 打开当前目录}" />
+                                ToolTip.Tip="{i18n:T 打开当前目录}"
+                                Content="↗"
+                                MinWidth="36" />
                         <Button
                                 Classes="accent"
                                 Grid.Column="3"
@@ -86,7 +93,13 @@
                                 ItemsSource="{Binding MusicFolderHistory}"
                                 SelectedValue="{Binding SelectedMusicFolder, Mode=OneWay}"
                                 SelectedValueBinding="{Binding FullPath}"
-                                ToolTip.Tip="{i18n:T 历史目录：切换曲谱目录}" />
+                                ToolTip.Tip="{i18n:T 历史目录：切换曲谱目录}">
+                            <i:Interaction.Behaviors>
+                                <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                    <ia:InvokeCommandAction Command="{Binding SelectMusicFolderCommand}" CommandParameter="{Binding SelectedValue, ElementName=MusicFolderHistoryComboBox}" />
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </ComboBox>
                         <TextBox
                                 Grid.Column="2"
                                 Margin="0,0,8,0"
@@ -128,6 +141,11 @@
                                 ItemsSource="{Binding MusicItemsView}"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 SelectedItem="{Binding SelectedMusicItem}">
+                            <i:Interaction.Behaviors>
+                                <ia:EventTriggerBehavior EventName="DoubleTapped">
+                                    <ia:InvokeCommandAction Command="{Binding PlaySelectedCommand}" CommandParameter="{Binding SelectedItem, ElementName=MusicListView}" />
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Border
@@ -307,7 +325,9 @@
                                 Height="44"
                                 Margin="3,0"
                                 Command="{Binding PreviousCommand}"
-                                ToolTip.Tip="{i18n:T 上一首}" />
+                                ToolTip.Tip="{i18n:T 上一首}"
+                                Content="⏮"
+                                MinWidth="36" />
                         <Button
                                 Classes="accent"
                                 Width="52"
@@ -320,13 +340,17 @@
                                 Height="44"
                                 Margin="3,0"
                                 Command="{Binding NextCommand}"
-                                ToolTip.Tip="{i18n:T 下一首}" />
+                                ToolTip.Tip="{i18n:T 下一首}"
+                                Content="⏭"
+                                MinWidth="36" />
                         <Button
                                 Width="44"
                                 Height="44"
                                 Margin="3,0"
                                 Command="{Binding StopCommand}"
-                                ToolTip.Tip="{i18n:T 停止}" />
+                                ToolTip.Tip="{i18n:T 停止}"
+                                Content="■"
+                                MinWidth="36" />
                     </StackPanel>
                     <StackPanel
                             Grid.Column="2"

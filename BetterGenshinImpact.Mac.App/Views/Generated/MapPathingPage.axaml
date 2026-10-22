@@ -76,6 +76,13 @@
                                     </Grid>
                                 </TreeDataTemplate>
                             </TreeView.ItemTemplate>
+                            <i:Interaction.Behaviors>
+                                <c:RightPressCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="True" />
+                                <c:ContextMenuClosedCommandBehavior Command="{Binding SetRightClickSelectionCommand}" CommandParameter="False" />
+                                <ia:EventTriggerBehavior EventName="SelectionChanged">
+                                    <ia:InvokeCommandAction Command="{Binding OpenPathingDetailCommand}" CommandParameter="{Binding SelectNode}" />
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
                             <TreeView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Command="{Binding StartCommand}" CommandParameter="{Binding $parent[ContextMenu].PlacementTarget.SelectedItem}" Header="{i18n:T 执行任务}" />

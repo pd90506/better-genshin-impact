@@ -2761,7 +2761,9 @@
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             Margin="0,0,36,0"
-                            HorizontalAlignment="Right" />
+                            HorizontalAlignment="Right"
+                            Command="{Binding BindQqCommand}"
+                            Content="{i18n:T 绑定}" />
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -2788,7 +2790,9 @@
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             Margin="0,0,36,0"
-                            HorizontalAlignment="Right" />
+                            HorizontalAlignment="Right"
+                            Command="{Binding BindGroupQqCommand}"
+                            Content="{i18n:T 绑定群}" />
                 </Grid>
                 <Grid Margin="16">
                     <Grid.RowDefinitions>
@@ -2975,7 +2979,9 @@
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             Margin="0,0,36,0"
-                            HorizontalAlignment="Right" />
+                            HorizontalAlignment="Right"
+                            Command="{Binding BindWechatClawbotCommand}"
+                            Content="{i18n:T 登录并绑定}" />
                 </Grid>
                 <TextBlock
                         Margin="16,0,16,0"

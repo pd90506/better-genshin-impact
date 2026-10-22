@@ -92,6 +92,26 @@ EVENT_MAP = {
 
 warnings = []
 
+# WPF-UI SymbolIcon → 文字图标（只用于没有文字的图标按钮）
+SYMBOL_GLYPHS = {
+    "Play": "▶", "Stop": "■", "Add": "＋", "Delete": "🗑", "Dismiss": "✕", "DismissCircle": "✕", "Settings": "⚙",
+    "FolderOpen": "📂", "Folder": "📁", "FolderZip": "🗜", "Open": "↗", "LinkSquare": "↗", "Archive": "🗄",
+    "ArrowDownload": "⤓", "ArrowSync": "⟳", "ArrowClockwise": "⟳", "ArrowCounterclockwise": "⟲", "ArrowReset": "⟲",
+    "ArrowSwap": "⇄", "ArrowMinimize": "⤡", "ArrowBounce": "↩", "Edit": "✎", "Save": "💾", "Image": "🖼", "Camera": "📷",
+    "Globe": "🌐", "Map": "🗺", "Keyboard": "⌨", "KeyboardMouse": "⌨", "Timer": "⏱", "Previous": "⏮", "Next": "⏭",
+    "Pin": "📌", "PinOff": "📍", "Info": "ℹ", "Alert": "🔔", "Chat": "💬", "ChatMultiple": "💬", "Send": "➤",
+    "MoreHorizontal": "⋯", "EyeOff": "🙈", "Cloud": "☁", "CloudSync": "☁", "CloudLink": "☁", "CloudArrowUp": "☁",
+    "Record": "⏺", "Cursor": "🖱", "DesktopCursor": "🖱", "Bot": "🤖", "Script": "📜", "Notepad": "📝",
+    "MusicNote2": "♪", "Search": "🔍", "Copy": "⧉", "Filter": "⏷",
+}
+
+
+def symbol_glyph(value):
+    m = re.search(r"SymbolIcon\s+(?:Symbol=)?(\w+?)(\d+)?\}", value or "")
+    if not m:
+        return None
+    return SYMBOL_GLYPHS.get(m.group(1), "•")
+
 # 需要保留的代码隐藏事件（macOS 版在 Views/Generated/*.Mac.cs 中重新实现）
 KEEP_HANDLERS = {
     "OneDragonFlowPage": {"AddTaskGroupButton_Click", "ConfirmButton_Click", "CancelButton_Click", "SereniteaPotTpType_Clicked"},
@@ -231,7 +251,8 @@ class Converter:
             elif m:
                 ancestor = m.group(1) or m.group(2)
                 local = ancestor.split(":")[-1]
-                if local in ("Page", "UserControl", "Window", "FluentWindow") or ancestor.endswith("Page") or ancestor.endswith("View"):
+                is_page = local in ("Page", "UserControl", "Window", "FluentWindow") or local.endswith("Page") or local.endswith("View")
+                if is_page and local not in ("ListView", "TreeListView", "TreeView", "DataGridView"):
                     p = path or "DataContext"
                     if p.startswith("ViewModel."):
                         p = "DataContext." + p[len("ViewModel."):]
@@ -258,12 +279,12 @@ class Converter:
         ns, name = qn(el)
         full = name
 
+        if ns == B:
+            return self.convert_behavior(el)
         if (ns, name) in DROP_ELEMENTS:
             return None
         if "." in name and name.endswith(DROP_PROPERTY_SUFFIXES):
             return None
-        if ns == B:
-            return self.convert_behavior(el)
         if ns == VIO:
             if name == "CascadingComboBox":
                 out = ET.Element("c:CascadingComboBox")
@@ -316,6 +337,18 @@ class Converter:
                         out.append(c)
                 else:
                     out.append(converted)
+        # 只有图标的按钮：用文字图标代替 SymbolIcon
+        if tag in ("Button", "DropDownButton", "ToggleButton") and not out.get("Content") and len(out) == 0 and not (out.text or "").strip():
+            glyph = symbol_glyph(el.get("Icon"))
+            if glyph is None:
+                for child in el:
+                    if qn(child)[1].endswith(".Icon"):
+                        for icon in child:
+                            if qn(icon)[1] == "SymbolIcon":
+                                glyph = SYMBOL_GLYPHS.get(re.sub(r"\d+$", "", icon.get("Symbol", "")), "•")
+            if glyph is not None:
+                out.set("Content", glyph)
+                out.set("MinWidth", out.get("MinWidth") or "36")
         self.post_process(out, tag)
         return out
 
@@ -416,6 +449,18 @@ class Converter:
         # 属性元素：Owner.Property
         if "." in cname and cns in (WPF, UI, X) or ("." in cname and (cns.startswith("clr-namespace") or cns.startswith("using:"))):
             owner, prop = cname.split(".", 1)
+            if prop == "Style" and owner != "ContentControl":
+                self.convert_style_triggers(child, out)
+                return None
+            if prop == "Style" and owner == "ContentControl":
+                # 原版有时把内容放在 Style 的 Content Setter 中（配合 DataTrigger 显示空状态），取出默认内容
+                for setter in child.iter():
+                    if qn(setter)[1] == "Setter" and setter.get("Property") == "Content":
+                        for value in setter:
+                            if qn(value)[1] == "Setter.Value":
+                                for content in value:
+                                    return self.convert_element(content)
+                return None
             if cname.endswith(DROP_PROPERTY_SUFFIXES) or prop in ("Resources",) and owner in ("Page", "UserControl", "Window", "FluentWindow"):
                 if prop == "Resources":
                     return self.convert_resources(child, parent_tag)
@@ -452,6 +497,73 @@ class Converter:
                 pe.text = child.text
             return pe
         return self.convert_element(child)
+
+    def convert_style_triggers(self, style_prop, out):
+        """把局部 Style 中的 DataTrigger 转换为带 c:TriggerConverter 的绑定（只处理同一属性只依赖一个绑定的情况）"""
+        style = next((e for e in style_prop if qn(e)[1] == "Style"), None)
+        if style is None:
+            return
+        defaults = {e.get("Property"): e.get("Value") for e in style if qn(e)[1] == "Setter"}
+        groups = {}
+        for trig in style.iter():
+            if qn(trig)[1] != "DataTrigger":
+                continue
+            for setter in trig:
+                if qn(setter)[1] == "Setter" and setter.get("Value") is not None:
+                    groups.setdefault(setter.get("Property"), []).append((trig.get("Binding"), trig.get("Value"), setter.get("Value")))
+        def apply_default(prop):
+            # 无法转换的触发器：至少保留 Style 中的默认值
+            default = defaults.get(prop)
+            if default is not None and prop not in out.attrib and prop not in ("Template", "Visibility"):
+                cv = self.convert_markup(default, prop)
+                if cv is not None:
+                    out.set(prop, cv)
+
+        for prop, items in groups.items():
+            target = {"Visibility": "IsVisible", "Foreground": "Foreground", "Content": "Content", "Fill": "Fill"}.get(prop)
+            bindings = {b for b, _, _ in items}
+            results = {r for _, _, r in items}
+            markup_values = any((v or "").startswith("{") for v in list(results) + [defaults.get(prop)]) and prop not in ("Foreground", "Fill", "Visibility")
+            if target is None or len(bindings) != 1 or len(results) != 1 or target in out.attrib or markup_values:
+                warn(f"{self.page_name}: 无法转换 DataTrigger（{prop}），使用默认值")
+                apply_default(prop)
+                continue
+            binding = bindings.pop()
+            result = results.pop()
+            matches = []
+            negate = False
+            if "NotNullConverter" in binding:
+                binding = re.sub(r",?\s*Converter=\{StaticResource NotNullConverter\}", "", binding)
+                negate = None
+            for _, value, _ in items:
+                if negate is None:
+                    matches.append("@notnull" if value == "True" else "@null")
+                elif value == "{x:Null}":
+                    matches.append("@null")
+                else:
+                    m = re.match(r"\{x:Static\s+[\w:]+\.(\w+)\}", value or "")
+                    matches.append(m.group(1) if m else (value or ""))
+            if "Converter=" in binding:
+                warn(f"{self.page_name}: DataTrigger 绑定带转换器，无法转换（{prop}）")
+                continue
+            cv = self.convert_markup(binding, prop)
+            if cv is None or not cv.startswith("{Binding"):
+                warn(f"{self.page_name}: 无法转换 DataTrigger 绑定（{prop}）")
+                continue
+
+            def norm(v):
+                if v is None:
+                    return "@unset"
+                if prop == "Visibility":
+                    return "True" if v == "Visible" else "False"
+                if v.startswith("{"):
+                    return "@unset"
+                return v
+            param = ";".join(matches) + "|" + norm(result) + "|" + norm(defaults.get(prop))
+            self.used_clr["c"] = "using:BetterGenshinImpact.MacApp.Controls"
+            body = cv[len("{Binding"):-1].strip()
+            sep = ", " if body else " "
+            out.set(target, "{Binding" + (" " + body if body else "") + sep.rstrip() + " Converter={x:Static c:TriggerConverter.Instance}, ConverterParameter='" + param.replace("'", "") + "'}")
 
     def convert_resources(self, res_el, parent_tag):
         kept = []
@@ -500,6 +612,32 @@ class Converter:
                 if tname != "EventTrigger":
                     continue
                 event = trig.get("EventName", "Loaded")
+                if event in ("Checked", "Unchecked"):
+                    # Avalonia 的 IsCheckedChanged 不区分勾选/取消，且原版常把触发器放在父面板上
+                    for action in trig:
+                        b = ET.Element("c:CheckedCommandBehavior")
+                        b.set("When", "True" if event == "Checked" else "False")
+                        for k in ("Command", "CommandParameter"):
+                            if action.get(k) is not None:
+                                cv = self.convert_markup(action.get(k), k)
+                                if cv is not None:
+                                    b.set(k, cv)
+                        out.append(b)
+                    continue
+                if event in ("PreviewMouseRightButtonDown", "ContextMenuClosing"):
+                    # 没有对应事件，使用 macOS 版自定义行为
+                    for action in trig:
+                        b = ET.Element("c:RightPressCommandBehavior" if event == "PreviewMouseRightButtonDown" else "c:ContextMenuClosedCommandBehavior")
+                        for k in ("Command", "CommandParameter"):
+                            if action.get(k) is not None:
+                                cv = self.convert_markup(action.get(k), k)
+                                if cv is not None:
+                                    b.set(k, cv)
+                        out.append(b)
+                    continue
+                if event in ("Opened", "Closing"):
+                    # 抽屉的打开/关闭命令由 c:DrawerHost 调用，窗口的 ClosingCommand 由 FeatureWindows 调用
+                    continue
                 mapped = EVENT_MAP.get(event)
                 if mapped is None:
                     warn(f"{self.page_name}: 未映射事件 {event}")
