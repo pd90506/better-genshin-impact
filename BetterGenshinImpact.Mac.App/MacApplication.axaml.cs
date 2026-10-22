@@ -10,6 +10,7 @@ using BetterGenshinImpact.MacApp.Views;
 using BetterGenshinImpact.Platform;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BetterGenshinImpact.MacApp;
 
@@ -47,8 +48,24 @@ public partial class MacApplication : Avalonia.Application
                 mainWindow.Clipboard?.GetTextAsync().GetAwaiter().GetResult());
 
             desktop.ShutdownRequested += (_, _) => OnShutdown();
-            mainWindow.Opened += (_, _) => CommandLineActivation.Handle();
-            _ = Task.Run(() => _host.StartAsync());
+            // 与原版相同：推理运行时、Host、服务器时间初始化完成后，再执行命令行任务和启动检查
+            var started = Task.Run(App.StartAsync);
+            mainWindow.Opened += async (_, _) =>
+            {
+                try
+                {
+                    await started;
+                }
+                catch (Exception e)
+                {
+                    App.GetLogger<MacApplication>().LogError(e, "启动失败");
+                    Wpf.Ui.Violeta.Controls.Toast.Error("启动失败：" + e.Message);
+                    return;
+                }
+
+                CommandLineActivation.Handle();
+                await App.RunPostStartupAsync();
+            };
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -59,7 +76,7 @@ public partial class MacApplication : Avalonia.Application
         try
         {
             App.GetService<Service.Interface.IConfigService>()?.Flush();
-            _host?.StopAsync(TimeSpan.FromSeconds(3)).GetAwaiter().GetResult();
+            Task.Run(App.StopAsync).Wait(TimeSpan.FromSeconds(5));
         }
         catch
         {

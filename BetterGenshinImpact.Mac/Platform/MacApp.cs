@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using BetterGenshinImpact.Core.Config;
 using BetterGenshinImpact.Core.Mask;
 using BetterGenshinImpact.Core.Monitor;
@@ -89,6 +90,79 @@ public partial class App : System.Windows.Application
     }
 
     private static IHost EnsureHost() => _host ?? Initialize();
+
+    /// <summary>
+    /// 启动后台服务，与原版 App.OnStartup 的顺序相同：先初始化推理运行时，再启动 Host，最后初始化服务器时间
+    /// </summary>
+    public static async Task StartAsync()
+    {
+        var host = EnsureHost();
+        await host.Services.GetRequiredService<InferenceRuntimeService>().InitializeAsync();
+        await host.StartAsync();
+        ServerTimeHelper.Initialize(host.Services.GetRequiredService<IServerTimeProvider>());
+    }
+
+    /// <summary>
+    /// 主窗口显示后的启动操作（原版 MainWindowViewModel.OnLoaded 中与平台无关的部分）：
+    /// 推理引擎验证、OCR 预热、自动更新已订阅脚本、清理临时目录
+    /// </summary>
+    public static async Task RunPostStartupAsync()
+    {
+        var logger = GetLogger<App>();
+        var inference = GetService<InferenceRuntimeService>()!;
+        try
+        {
+            await inference.ValidatePendingAsync();
+            if (!inference.IsStopping && !string.IsNullOrWhiteSpace(inference.StartupMessage))
+            {
+                Wpf.Ui.Violeta.Controls.Toast.Warning(inference.StartupMessage);
+            }
+        }
+        catch (Exception e)
+        {
+            logger.LogWarning(e, "推理引擎启动验证未完成");
+        }
+
+        if (inference.IsStopping)
+        {
+            return;
+        }
+
+        try
+        {
+            await Task.Run(() => GetService<InferenceModelDiagnostics>()!.PreheatOcrAsync());
+            logger.LogInformation("OCR 预热完成");
+        }
+        catch (Exception e) when (!inference.IsStopping)
+        {
+            logger.LogError(e, "OCR 预热失败");
+        }
+
+        if (CommandLineOptions.Instance.HasTaskArgs)
+        {
+            return;
+        }
+
+        _ = Task.Run(() => Core.Script.ScriptRepoUpdater.Instance.AutoUpdateSubscribedScripts());
+        TempManager.CleanUp();
+    }
+
+    /// <summary>
+    /// 退出时停止后台服务（原版 App.OnExit）
+    /// </summary>
+    public static async Task StopAsync()
+    {
+        if (_host == null)
+        {
+            return;
+        }
+
+        await _host.Services.GetRequiredService<InferenceRuntimeService>().StopAsync();
+        await _host.Services.GetRequiredService<OnnxRuntimeInstaller>().StopAsync();
+        await _host.Services.GetRequiredService<InferenceModelDiagnostics>().StopAsync();
+        await _host.StopAsync(TimeSpan.FromSeconds(3));
+        TempManager.CleanUp();
+    }
 
     private static void RegisterServices(IServiceCollection services)
     {

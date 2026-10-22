@@ -117,6 +117,19 @@ public partial class MainWindow : Window
             bitmap.Save(System.IO.Path.Combine(dir, $"{i:00}.png"));
         }
 
+        // 任务运行依赖的启动初始化（原版 App.OnStartup）
+        var inferenceReady = App.GetService<Core.Recognition.ONNX.InferenceRuntimeService>()?.IsReady == true;
+        string serverTime;
+        try
+        {
+            serverTime = Helpers.ServerTimeHelper.GetServerTimeNow().ToString("u");
+        }
+        catch (Exception e)
+        {
+            serverTime = "FAILED " + e.Message;
+        }
+
+        Console.WriteLine($"[smoke] inference ready: {inferenceReady}, server time: {serverTime}");
         Console.WriteLine("[smoke] done");
         Close();
     }
