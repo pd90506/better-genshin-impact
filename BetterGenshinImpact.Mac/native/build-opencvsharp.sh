@@ -78,6 +78,7 @@ OPENCV_DIR="$WORK_DIR/opencv-install/lib/cmake/opencv4"
 [ -d "$OPENCV_DIR" ] || OPENCV_DIR="$WORK_DIR/opencv-install/lib64/cmake/opencv4"
 
 cmake -S opencvsharp/src -B opencvsharp-build -G Ninja \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_BUILD_TYPE=Release \
   -DOpenCV_DIR="$OPENCV_DIR" \
   "${PLATFORM_FLAGS[@]}"
