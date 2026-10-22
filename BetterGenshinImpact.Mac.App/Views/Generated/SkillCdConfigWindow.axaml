@@ -1,0 +1,83 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    xmlns:skillCd="using:BetterGenshinImpact.GameTask.SkillCd"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.SkillCdConfigWindow" x:Name="PageRoot" Height="600" Width="450">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" Margin="20,0,10,20">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="*" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock
+                    Grid.Row="0"
+                    Text="{i18n:T 为指定的角色配置未识别到 CD 数字时的默认值。如玛薇卡开 E 会显示摩托车，识别不到 CD 。仅填写了角色名的角色将使用默认 CD。}"
+                    Margin="0,0,10,15"
+                    TextWrapping="Wrap" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,25,0">
+                <ItemsControl ItemsSource="{Binding Rules}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type skillCd:SkillCdRule}">
+                            <Grid Margin="0,5,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                        Grid.Column="0"
+                                        Text="{i18n:T 角色名:}"
+                                        VerticalAlignment="Center"
+                                        Margin="0,0,5,0" />
+                                <TextBox
+                                        Grid.Column="1"
+                                        Text="{Binding RoleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Margin="0,0,10,0"
+                                        MinWidth="120"
+                                        VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center" />
+                                <TextBlock
+                                        Grid.Column="2"
+                                        Text="{i18n:T CD(秒):}"
+                                        VerticalAlignment="Center"
+                                        Margin="0,0,5,0" />
+                                <TextBox
+                                        Grid.Column="3"
+                                        Text="{Binding CdValueText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        MinWidth="80"
+                                        VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center" />
+                                <Button
+                                        Grid.Column="4"
+                                        Margin="10,0,0,0"
+                                        Width="36"
+                                        Padding="0"
+                                        VerticalAlignment="Stretch"
+                                        Click="OnDeleteClick" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <StackPanel Grid.Row="2" Margin="0,15,10,0">
+                <Button
+                        Classes="accent"
+                        Content="{i18n:T 新增配置}"
+                        HorizontalAlignment="Stretch"
+                        Click="OnAddClick" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -89,9 +89,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 配置每个角色执行的宏，比如：胡桃A重跳，}" />
-                        <Span Command="{Binding GoToOneKeyMacroUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看说明}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToOneKeyMacroUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看说明}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <Button
                             Grid.Row="0"

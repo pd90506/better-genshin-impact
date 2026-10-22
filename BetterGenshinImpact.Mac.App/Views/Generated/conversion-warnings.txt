@@ -1,1 +1,2 @@
-
+MapPathingPage: 删除引用非 CLR 命名空间的 x:Static（Converter）
+OneDragonFlowPage: 删除代码隐藏事件 ContextMenuOpening=DockPanel_ContextMenuOpening

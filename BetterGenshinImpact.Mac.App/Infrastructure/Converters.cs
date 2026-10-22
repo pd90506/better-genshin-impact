@@ -51,4 +51,15 @@ public static class KeyMapper
             _ => System.Windows.Input.Key.None,
         };
     }
+
+    public static System.Windows.Input.ModifierKeys ToWpf(Avalonia.Input.KeyModifiers modifiers)
+    {
+        var result = System.Windows.Input.ModifierKeys.None;
+        if (modifiers.HasFlag(Avalonia.Input.KeyModifiers.Control)) result |= System.Windows.Input.ModifierKeys.Control;
+        if (modifiers.HasFlag(Avalonia.Input.KeyModifiers.Alt)) result |= System.Windows.Input.ModifierKeys.Alt;
+        if (modifiers.HasFlag(Avalonia.Input.KeyModifiers.Shift)) result |= System.Windows.Input.ModifierKeys.Shift;
+        // macOS 的 Command 键对应 Windows 键
+        if (modifiers.HasFlag(Avalonia.Input.KeyModifiers.Meta)) result |= System.Windows.Input.ModifierKeys.Windows;
+        return result;
+    }
 }

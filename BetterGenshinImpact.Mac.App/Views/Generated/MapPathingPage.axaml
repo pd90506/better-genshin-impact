@@ -28,9 +28,13 @@
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     TextWrapping="Wrap">
                 <Run Text="{i18n:T 可以实现自动采集、自动挖矿、自动锄地等功能。请在调度器中使用！}" />
-                <Span Command="{Binding GoToPathingUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                    <Run Text="{i18n:T 点击查看地图追踪与录制使用教程}" />
-                </Span>
+                <InlineUIContainer>
+                    <Button Classes="link" Command="{Binding GoToPathingUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                        <TextBlock>
+                            <Run Text="{i18n:T 点击查看地图追踪与录制使用教程}" />
+                        </TextBlock>
+                    </Button>
+                </InlineUIContainer>
             </TextBlock>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <Button Command="{Binding OpenScriptsFolderCommand}" Content="{i18n:T 打开任务目录}" />
@@ -64,7 +68,7 @@
                                         <ContentControl Grid.Column="0">
                                             <ContentControl.Content>
                                                 <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Spacing="8">
-                                                    <Image Height="16" Source="{Binding IconFilePath, Converter={x:Static vio:PathToIconConverter.Instance}}" />
+                                                    <Image Height="16" Source="{Binding IconFilePath}" />
                                                     <TextBlock VerticalAlignment="Center" Text="{Binding FileName}" />
                                                 </StackPanel>
                                             </ContentControl.Content>

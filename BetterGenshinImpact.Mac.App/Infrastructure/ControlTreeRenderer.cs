@@ -86,7 +86,7 @@ public static class ControlTreeRenderer
             case WC.Expander ex:
                 return new Expander { Header = RenderHeader(ex.Header), Content = Render(ex.Content), IsExpanded = ex.IsExpanded };
             case WC.GroupBox gb:
-                return new HeaderedContentControl { Header = RenderHeader(gb.Header), Content = Render(gb.Content) };
+                return new Avalonia.Controls.Primitives.HeaderedContentControl { Header = RenderHeader(gb.Header), Content = Render(gb.Content) };
             case WC.TextBox tb:
                 return RenderTextBox(tb);
             case WC.TextBlock tb:

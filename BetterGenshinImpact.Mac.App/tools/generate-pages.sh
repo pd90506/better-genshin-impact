@@ -3,6 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 SRC=../BetterGenshinImpact/View/Pages
+WIN=../BetterGenshinImpact/View/Windows
 python3 tools/wpf2avalonia.py Views/Generated \
   TriggerSettingsPage=$SRC/TriggerSettingsPage.xaml \
   TaskSettingsPage=$SRC/TaskSettingsPage.xaml \
@@ -19,4 +20,9 @@ python3 tools/wpf2avalonia.py Views/Generated \
   MusicPage=$SRC/MusicPage.xaml \
   ScriptGroupConfigView=$SRC/View/ScriptGroupConfigView.xaml \
   PathingConfigView=$SRC/View/PathingConfigView.xaml \
+  AutoPickBlacklistConfigWindow=$WIN/AutoPickBlacklistConfigWindow.xaml \
+  AutoPickWhitelistConfigWindow=$WIN/AutoPickWhitelistConfigWindow.xaml \
+  JsonMonoDialog=$WIN/JsonMonoDialog.xaml \
+  SkillCdConfigWindow=$WIN/SkillCdConfigWindow.xaml \
+  MusicSettingsWindow=$WIN/MusicSettingsWindow.xaml \
   $(for f in $SRC/OneDragon/*.xaml; do n=$(basename "$f" .xaml); echo "OneDragon$n=$f"; done)

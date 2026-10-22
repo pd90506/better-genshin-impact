@@ -85,9 +85,13 @@
                     <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T （实验功能）请在左侧栏选择或新增配置组}" />
                     <TextBlock Margin="0,0,0,8" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap">
                         <Run Text="{i18n:T 在左侧栏目右键可以新增/修改配置组，拖拽进行配置组排序。配置组内可以添加并配置软件内的 Javascript 脚本、键鼠脚本等，并能够控制执行次数、顺序等，}" />
-                        <Span Command="{Binding GoToScriptGroupUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看调度器使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToScriptGroupUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看调度器使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{i18n:T 在左侧栏目右键可以新增配置组，或者直接点击下面按钮新增配置组}" />
                     <Button Margin="0,0,0,12" Command="{Binding AddScriptGroupCommand}" Content="{i18n:T 新增配置组}" />

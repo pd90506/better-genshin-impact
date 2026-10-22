@@ -889,9 +889,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 可以通过快捷键保存截图，文件保存在}" />
-                        <Span Command="{Binding GoToFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="log/screenshot" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="log/screenshot" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <ToggleSwitch
                             Grid.Row="0"
@@ -975,9 +979,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 保存奖励识别的调试图片到 }" />
-                        <Span Command="{Binding GoToRewardRecognitionFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="log/RewardRecognition" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToRewardRecognitionFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="log/RewardRecognition" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <ToggleSwitch
                             Grid.Row="0"

@@ -1180,9 +1180,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 按下}" />
-                        <Span Command="{Binding GoToHotKeyPageCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T [手动触发快速传送触发快捷键]}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToHotKeyPageCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T [手动触发快速传送触发快捷键]}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                         <Run Text="{i18n:T 后才进行快速传送}" />
                     </TextBlock>
                     <ToggleSwitch

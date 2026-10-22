@@ -58,6 +58,8 @@ DROP_PROPERTY_SUFFIXES = (".Style", ".Triggers", ".ItemContainerStyle", ".FocusV
                           ".BitmapEffect", ".ItemContainerStyleSelector", ".ColumnHeaderContainerStyle")
 
 DROP_ATTRS = {
+    "WindowCornerPreference", "WindowBackdropType", "ExtendsContentIntoTitleBar", "WindowStartupLocation", "ResizeMode",
+    "SizeToContent", "ShowInTaskbar", "Topmost", "AllowsTransparency", "WindowStyle", "PopupAnimation",
     "SnapsToDevicePixels", "UseLayoutRounding", "FocusVisualStyle", "OverridesDefaultStyle", "Style", "ItemContainerStyle",
     "Title", "ContentPadding", "Icon", "SpinButtonPlacementMode", "ValidationMode", "ClearButtonEnabled", "AcceptsExpression",
     "LargeChange", "Appearance", "TextTrimming", "IsMoveToPointEnabled", "IsSnapToTickEnabled", "ShowsPreview",
@@ -93,6 +95,7 @@ warnings = []
 # 需要保留的代码隐藏事件（macOS 版在 Views/Generated/*.Mac.cs 中重新实现）
 KEEP_HANDLERS = {
     "OneDragonFlowPage": {"AddTaskGroupButton_Click", "ConfirmButton_Click", "CancelButton_Click", "SereniteaPotTpType_Clicked"},
+    "SkillCdConfigWindow": {"OnAddClick", "OnDeleteClick"},
 }
 
 
@@ -155,7 +158,9 @@ class Converter:
         if kind.startswith("x:"):
             # x:Static / x:Type / x:Null 中的命名空间前缀需要声明
             for p in re.findall(r"(\w+):", inner[2:]):
-                self.note_prefix(p)
+                if not self.note_prefix(p):
+                    warn(f"{self.page_name}: 删除引用非 CLR 命名空间的 {kind}（{attr_name}）")
+                    return None
             return value
 
         if ":" in kind:
@@ -164,12 +169,16 @@ class Converter:
         return value
 
     def note_prefix(self, prefix):
+        """声明前缀对应的 CLR 命名空间，返回 False 表示前缀不是 CLR 命名空间"""
         for uri, p in self.ns_map.items():
             if p == prefix and uri.startswith("clr-namespace:"):
                 ns = uri[len("clr-namespace:"):].split(";")[0]
                 self.used_clr[prefix] = "using:" + ns
+                return True
             elif p == prefix and uri.startswith("using:"):
                 self.used_clr[prefix] = uri
+                return True
+        return prefix in ("x", "sys")
 
     def convert_binding(self, args):
         parts = split_args(args)
@@ -596,6 +605,8 @@ class Converter:
             return "c:DrawerHost", {}, []
         if name == "MarkdownView":
             return "c:MarkdownPresenter", {}, []
+        if name == "JsonCodeBox":
+            return "c:CodeTextBox", {}, []
         if clr == "BetterGenshinImpact.View.Pages.OneDragon":
             self.used_clr["gen"] = "using:BetterGenshinImpact.MacApp.Views.Generated"
             return f"gen:OneDragon{name}", {}, []
@@ -675,7 +686,8 @@ class Converter:
                                                                                        "MouseLeave", "PreviewTextInput", "DropDownClosed",
                                                                                        "IsVisibleChanged", "ScrollChanged", "Expanded",
                                                                                        "Collapsed", "MouseRightButtonUp", "PreviewMouseWheel",
-                                                                                       "RequestNavigate", "Navigated", "SelectedItemChanged"):
+                                                                                       "RequestNavigate", "Navigated", "SelectedItemChanged",
+                                                                                       "ContextMenuOpening"):
             if v in KEEP_HANDLERS.get(self.page_name, set()):
                 out.set(local, v)
                 return
@@ -729,6 +741,12 @@ class Converter:
             return
         if local == "Spacing" and tag not in ("StackPanel",):
             return
+        if tag == "Popup" and local == "StaysOpen":
+            out.set("IsLightDismissEnabled", "True" if v == "False" else "False")
+            return
+        if tag == "Popup" and local == "Placement":
+            v = {"Absolute": "Center", "AbsolutePoint": "Center", "Relative": "Bottom", "RelativePoint": "Bottom",
+                 "Mouse": "Pointer", "MousePoint": "Pointer", "Custom": "Bottom"}.get(v, v)
         cv = self.convert_markup(v, local)
         if cv is None:
             return
@@ -751,6 +769,24 @@ class Converter:
         out.set("IsVisible", cv)
 
     def post_process(self, out, tag):
+        # TextBlock 中的 Hyperlink（Command）→ 内嵌链接按钮
+        if tag == "Span" and out.get("Command"):
+            text = ET.Element("TextBlock")
+            for child in list(out):
+                out.remove(child)
+                text.append(child)
+            if out.text:
+                text.text, out.text = out.text, None
+            button = ET.Element("Button")
+            button.set("Classes", "link")
+            for k in ("Command", "CommandParameter", "Foreground", "ToolTip.Tip"):
+                if out.get(k) is not None:
+                    button.set(k, out.get(k))
+            for k in list(out.attrib):
+                del out.attrib[k]
+            button.append(text)
+            out.tag = "InlineUIContainer"
+            out.append(button)
         # TextBox 的 AcceptsReturn 需要换行
         if tag == "Expander" and "card" in (out.get("Classes") or ""):
             out.set("HorizontalAlignment", "Stretch")

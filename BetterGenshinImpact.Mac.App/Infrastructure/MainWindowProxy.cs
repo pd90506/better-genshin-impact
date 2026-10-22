@@ -18,13 +18,13 @@ public sealed class MainWindowProxy : View.MainWindow
 
     public override W.WindowState WindowState
     {
-        get => Dispatcher.UIThread.Invoke(() => _window.WindowState switch
+        get => Avalonia.Threading.Dispatcher.UIThread.Invoke(() => _window.WindowState switch
         {
             Avalonia.Controls.WindowState.Minimized => W.WindowState.Minimized,
             Avalonia.Controls.WindowState.Maximized or Avalonia.Controls.WindowState.FullScreen => W.WindowState.Maximized,
             _ => W.WindowState.Normal,
         });
-        set => Dispatcher.UIThread.Post(() => _window.WindowState = value switch
+        set => Avalonia.Threading.Dispatcher.UIThread.Post(() => _window.WindowState = value switch
         {
             W.WindowState.Minimized => Avalonia.Controls.WindowState.Minimized,
             W.WindowState.Maximized => Avalonia.Controls.WindowState.Maximized,
@@ -35,20 +35,20 @@ public sealed class MainWindowProxy : View.MainWindow
     public override bool Topmost
     {
         get => _window.Topmost;
-        set => Dispatcher.UIThread.Post(() => _window.Topmost = value);
+        set => Avalonia.Threading.Dispatcher.UIThread.Post(() => _window.Topmost = value);
     }
 
-    public override void Show() => Dispatcher.UIThread.Post(() => _window.Show());
+    public override void Show() => Avalonia.Threading.Dispatcher.UIThread.Post(() => _window.Show());
 
-    public override void Hide() => Dispatcher.UIThread.Post(() => _window.Hide());
+    public override void Hide() => Avalonia.Threading.Dispatcher.UIThread.Post(() => _window.Hide());
 
     public override bool Activate()
     {
-        Dispatcher.UIThread.Post(() => _window.Activate());
+        Avalonia.Threading.Dispatcher.UIThread.Post(() => _window.Activate());
         return true;
     }
 
-    public override void Close() => Dispatcher.UIThread.Post(() => _window.Close());
+    public override void Close() => Avalonia.Threading.Dispatcher.UIThread.Post(() => _window.Close());
 
     public override void NavigateTo(System.Type pageType) => Wpf.Ui.NavigationService.NavigateHandler?.Invoke(pageType);
 }

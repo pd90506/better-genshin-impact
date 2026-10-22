@@ -15,7 +15,7 @@
             <ColumnDefinition Width="*" MaxWidth="300" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <DockPanel Grid.Column="0" ContextMenuOpening="DockPanel_ContextMenuOpening">
+        <DockPanel Grid.Column="0">
             <DockPanel.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{Binding AddTaskGroupCommand}" Header="{i18n:T 新增配置}" />
@@ -51,11 +51,7 @@
                         Margin="0,0,10,0"
                         x:Name="AddTaskGroupButton"
                         Click="AddTaskGroupButton_Click" />
-                <Popup
-                        x:Name="AddConfigGroupPopup"
-                        Placement="Absolute"
-                        PopupAnimation="Fade"
-                        StaysOpen="False">
+                <Popup x:Name="AddConfigGroupPopup" Placement="Center" IsLightDismissEnabled="True">
                     <Border
                             CornerRadius="8"
                             Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -759,9 +755,8 @@
                                         Placement="Center"
                                         PlacementTarget="{Binding ElementName=ToggleButton}"
                                         IsOpen="{Binding IsChecked, ElementName=ToggleButton}"
-                                        PopupAnimation="Fade"
                                         HorizontalAlignment="Center"
-                                        StaysOpen="False">
+                                        IsLightDismissEnabled="True">
                                     <Border
                                             CornerRadius="8"
                                             HorizontalAlignment="Left"
@@ -1628,9 +1623,8 @@
                                     Placement="Bottom"
                                     PlacementTarget="{Binding ElementName=ConfigListGrid}"
                                     IsOpen="{Binding IsChecked, ElementName=PotButton}"
-                                    PopupAnimation="Fade"
                                     HorizontalAlignment="Center"
-                                    StaysOpen="False"
+                                    IsLightDismissEnabled="True"
                                     Margin="12">
                                 <Border
                                         CornerRadius="12"

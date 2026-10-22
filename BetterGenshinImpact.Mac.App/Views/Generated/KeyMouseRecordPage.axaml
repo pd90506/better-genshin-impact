@@ -27,9 +27,13 @@
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                 TextWrapping="Wrap">
             <Run Text="{i18n:T 建议在游戏内使用快捷键进行录制，录制完成后在调度器中使用。}" />
-            <Span Command="{Binding GoToKmScriptUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                <Run Text="{i18n:T 点击查看键鼠录制回放功能教程}" />
-            </Span>
+            <InlineUIContainer>
+                <Button Classes="link" Command="{Binding GoToKmScriptUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                    <TextBlock>
+                        <Run Text="{i18n:T 点击查看键鼠录制回放功能教程}" />
+                    </TextBlock>
+                </Button>
+            </InlineUIContainer>
         </TextBlock>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Command="{Binding OpenScriptFolderCommand}" Content="{i18n:T 打开脚本目录}" />

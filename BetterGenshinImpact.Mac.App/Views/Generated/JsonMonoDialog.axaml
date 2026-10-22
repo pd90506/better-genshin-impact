@@ -1,0 +1,39 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.JsonMonoDialog"
+        x:Name="PageRoot"
+        Width="600"
+        Height="600"
+        FontFamily="{DynamicResource TextThemeFontFamily}"
+        Tag="JsonMonoDialog">
+    <Grid>
+        <Grid Margin="8,48,8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <c:CodeTextBox x:Name="JsonCodeBox" Code="{Binding JsonText, Mode=OneTime}" Background="#1e1e1e" />
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,8,0,8">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button
+                            MinWidth="90"
+                            Margin="8,0,8,0"
+                            Command="{Binding SaveCommand}"
+                            Content="{i18n:T 保存}" />
+                    <Button MinWidth="90" Command="{Binding CloseCommand}" Content="{i18n:T 关闭}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

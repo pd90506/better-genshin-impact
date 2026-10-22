@@ -1,0 +1,150 @@
+<!-- 由 tools/wpf2avalonia.py 从原版 WPF 页面生成，请勿手动修改；需要调整时修改转换脚本或在 Views/Pages 中另写页面 -->
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:BetterGenshinImpact.MacApp.Controls"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:i18n="using:BetterGenshinImpact.MacApp.Markup"
+    x:Class="BetterGenshinImpact.MacApp.Views.Generated.AutoPickBlacklistConfigWindow"
+        x:Name="PageRoot"
+        Width="820"
+        Height="640"
+        MinWidth="680"
+        MinHeight="520"
+        FontFamily="{DynamicResource TextThemeFontFamily}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Border
+                Grid.Row="1"
+                Margin="20,12,20,12"
+                Padding="14"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8">
+            <StackPanel>
+                <TextBlock FontWeight="SemiBold" Text="{i18n:T 默认拾取未被排除的内容}" />
+                <TextBlock
+                        Margin="0,5,0,0"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{i18n:T “拾取”规则优先级最高，可放行聊天/设置图标和“不拾取”规则中的同名内容。每行填写一条完整的 OCR 文本。}"
+                        TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+        <TabControl Grid.Row="2" Margin="20,0,20,0">
+            <TabItem Header="{i18n:T 不拾取（主要规则）}">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                            Margin="0,0,0,12"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{i18n:T 黑名单模式启用期间，默认、精确和模糊不拾取规则始终生效。}"
+                            TextWrapping="Wrap" />
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="0,0,0,6" FontWeight="SemiBold" Text="{i18n:T 精确匹配}" />
+                            <TextBox
+                                    Grid.Row="1"
+                                    AcceptsReturn="True"
+                                    AcceptsTab="False"
+                                    Watermark="{i18n:T 每行一条记录，例如：精致的宝箱}"
+                                    Text="{Binding DoNotPickText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="NoWrap"
+                                    VerticalContentAlignment="Top"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="0,0,0,6" FontWeight="SemiBold" Text="{i18n:T 模糊匹配}" />
+                            <TextBox
+                                    Grid.Row="1"
+                                    AcceptsReturn="True"
+                                    AcceptsTab="False"
+                                    Watermark="{i18n:T 每行一个关键词，OCR 文本包含该关键词时不拾取}"
+                                    Text="{Binding FuzzyDoNotPickText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="NoWrap"
+                                    VerticalContentAlignment="Top"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{i18n:T 拾取（优先放行）}">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Text="{i18n:T 启用拾取规则}" />
+                            <TextBlock
+                                    Margin="0,3,12,0"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{i18n:T 精确命中后直接拾取，并优先于图标排除和不拾取规则。}"
+                                    TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding PickEnabled, Mode=TwoWay}" />
+                    </Grid>
+                    <TextBox
+                            Grid.Row="1"
+                            AcceptsReturn="True"
+                            AcceptsTab="False"
+                            IsEnabled="{Binding PickEnabled}"
+                            Watermark="{i18n:T 每行一条记录，例如：调查}"
+                            Text="{Binding PickText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="NoWrap"
+                            VerticalContentAlignment="Top"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Grid Grid.Row="3" Margin="20,16,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{i18n:T 保存后立即刷新自动拾取规则。}" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button
+                        MinWidth="88"
+                        Margin="0,0,10,0"
+                        Command="{Binding CancelCommand}"
+                        Content="{i18n:T 取消}"
+                        IsCancel="True" />
+                <Button
+                        Classes="accent"
+                        MinWidth="88"
+                        Command="{Binding SaveCommand}"
+                        Content="{i18n:T 保存}"
+                        IsDefault="True" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

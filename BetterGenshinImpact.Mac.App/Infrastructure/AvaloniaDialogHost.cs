@@ -272,7 +272,7 @@ public sealed class AvaloniaDialogHost : IDialogHost
         return folders.FirstOrDefault()?.TryGetLocalPath();
     }
 
-    public bool OpenFeatureWindow(W.Window window, bool modal) => FeatureWindows.Open(window, modal);
+    public bool OpenFeatureWindow(W.Window window, bool modal) => Views.Windows.FeatureWindows.Open(window, modal);
 
     public void OpenUrl(string url)
     {

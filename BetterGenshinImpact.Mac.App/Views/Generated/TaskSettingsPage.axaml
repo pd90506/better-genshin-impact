@@ -39,9 +39,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 全自动打牌 -}" />
-                        <Span Command="{Binding GoToAutoGeniusInvokationUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoGeniusInvokationUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -146,9 +150,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 装备「王树瑞佑」，通过循环重启游戏刷新并收集木材 -}" />
-                        <Span Command="{Binding GoToAutoWoodUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoWoodUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -325,9 +333,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 自动执行选择的战斗策略 -}" />
-                        <Span Command="{Binding GoToAutoFightUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoFightUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -1131,9 +1143,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 基于钟离的自动循环刷本 -}" />
-                        <Span Command="{Binding GoToAutoDomainUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoDomainUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -1892,9 +1908,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 自动传送并进入幽境危战 -}" />
-                        <Span Command="{Binding GoToAutoStygianOnslaughtUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoStygianOnslaughtUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -2169,9 +2189,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 不要携带跟宠！在出现钓鱼F按钮的位置启动本任务 -}" />
-                        <Span Command="{Binding GoToAutoFishingUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoFishingUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -2327,9 +2351,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 自动定位并刷取地脉花 -}" />
-                        <Span Command="{Binding GoToAutoLeyLineOutcropUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoLeyLineOutcropUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -2927,9 +2955,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 可以自动演奏单个，也可以全自动完成整个专辑 -}" />
-                        <Span Command="{Binding GoToAutoMusicGameUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoMusicGameUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                 </Grid>
             </Expander.Header>
@@ -2954,9 +2986,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 进入演奏界面使用，下落模式必须选择垂落模式 -}" />
-                        <Span Command="{Binding GoToAutoMusicGameUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoMusicGameUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -2989,9 +3025,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 进入专辑界面使用，自动演奏未完成乐曲 -}" />
-                        <Span Command="{Binding GoToAutoMusicGameUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToAutoMusicGameUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -3512,9 +3552,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 指定匹配表达式逐一筛选分解，支持5星圣遗物 -}" />
-                        <Span Command="{Binding GoToArtifactSalvageUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToArtifactSalvageUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -3569,9 +3613,13 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap">
                         JavaScript -
-                        <Span Command="{Binding GoToArtifactSalvageUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToArtifactSalvageUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <TextBlock
                             Grid.Row="1"
@@ -3816,13 +3864,21 @@
                             TextWrapping="Wrap"
                             Grid.ColumnSpan="2">
                         <Run Text="{i18n:T 须要打开设置-启用保存截图功能，文件保存在}" />
-                        <Span Command="{Binding GoToGetGridIconsFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="log/gridIcons" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToGetGridIconsFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="log/gridIcons" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                         <LineBreak />
-                        <Span Command="{Binding GoToGetGridIconsUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 点击查看使用教程}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToGetGridIconsUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 点击查看使用教程}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <c:TwoStateButton
                             Grid.Row="0"
@@ -4004,9 +4060,13 @@
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             TextWrapping="Wrap">
                         <Run Text="{i18n:T 将数量OCR结果截图保存至本地 -}" />
-                        <Span Command="{Binding GoToInventoryCountComparisonFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                            <Run Text="{i18n:T 打开目录}" />
-                        </Span>
+                        <InlineUIContainer>
+                            <Button Classes="link" Command="{Binding GoToInventoryCountComparisonFolderCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                <TextBlock>
+                                    <Run Text="{i18n:T 打开目录}" />
+                                </TextBlock>
+                            </Button>
+                        </InlineUIContainer>
                     </TextBlock>
                     <ComboBox
                             Grid.Row="0"

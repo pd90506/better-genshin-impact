@@ -2026,9 +2026,13 @@
                                     Text=""
                                     TextWrapping="Wrap">
                                 <Run Text="{i18n:T 自动吃食物配置 -}" />
-                                <Span Command="{Binding GoToAutoEatUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                                    <Run Text="{i18n:T 点击查看调用方法}" />
-                                </Span>
+                                <InlineUIContainer>
+                                    <Button Classes="link" Command="{Binding GoToAutoEatUrlCommand}" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                        <TextBlock>
+                                            <Run Text="{i18n:T 点击查看调用方法}" />
+                                        </TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
                             </TextBlock>
                             <TextBlock
                                     Grid.Row="1"

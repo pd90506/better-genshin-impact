@@ -458,16 +458,26 @@ namespace BetterGenshinImpact.View.Windows
 
     public class SkillCdConfigWindow : FeatureWindow
     {
-        private readonly List<GameTask.SkillCd.SkillCdRule> _rules;
+        public System.Collections.ObjectModel.ObservableCollection<GameTask.SkillCd.SkillCdRule> Rules { get; set; }
 
-        public SkillCdConfigWindow(IEnumerable<GameTask.SkillCd.SkillCdRule> configList)
+        public SkillCdConfigWindow(IEnumerable<GameTask.SkillCd.SkillCdRule> initialRules)
         {
-            _rules = configList.ToList();
-            DataContext = _rules;
+            // 深度复制列表，避免直接修改原配置
+            Rules = new System.Collections.ObjectModel.ObservableCollection<GameTask.SkillCd.SkillCdRule>(
+                (initialRules ?? []).Select(r => new GameTask.SkillCd.SkillCdRule { RoleName = r.RoleName, CdValueText = r.CdValueText }));
+            if (Rules.Count == 0)
+            {
+                Rules.Add(new GameTask.SkillCd.SkillCdRule());
+            }
+
+            DataContext = this;
             Title = "技能冷却设置";
         }
 
-        public List<GameTask.SkillCd.SkillCdRule> GetValidRules() => _rules;
+        public List<GameTask.SkillCd.SkillCdRule> GetValidRules() => Rules
+            .Where(r => !string.IsNullOrWhiteSpace(r.RoleName))
+            .Select(r => new GameTask.SkillCd.SkillCdRule { RoleName = r.RoleName.Trim(), CdValueText = r.CdValueText?.Trim() })
+            .ToList();
     }
 
     public class WebImageInput : FeatureWindow
@@ -653,9 +663,14 @@ namespace BetterGenshinImpact.View.Pages
 
     public class OneDragonFlowPage : Page
     {
+        public static readonly List<string> SereniteaPotSchedule = ["每天重复", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
     }
 
     public class ScriptControlPage : Page
+    {
+    }
+
+    public class KeyBindingsSettingsPage : Page
     {
     }
 
